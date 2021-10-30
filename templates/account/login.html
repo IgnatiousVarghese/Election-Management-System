@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+
+    {{form.login_type.label_tag}}
+
+    {{form.login_type}}
+
+    username{{form.username}}
+
+    password{{form.password}}
+
+    <input type="submit" value="Login">
+</form>
+<a href="../../account/get_password/">
+    forgot your password?
+</a>
+
+{% endblock %}
