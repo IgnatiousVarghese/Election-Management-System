@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Voter(models.Model):
     rollno = models.CharField(max_length=30, primary_key=True)
     first_name = models.CharField(max_length=30)

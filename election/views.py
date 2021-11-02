@@ -1,12 +1,16 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render
 
-def home(request):
+def index(request):
     is_logged_in = True
     login_type = None
     context = { }
     if request.session.has_key('voter'):
         login_type = 'Voter'
         context['username'] = request.session['voter']
+
+        return voter_home(request, request.session['voter'])
+
     elif request.session.has_key('candidate'):
         login_type = 'Candidate'
         context['username'] = request.session['candidate']
@@ -21,4 +25,10 @@ def home(request):
         'login_type': login_type,
     })
 
-    return render(request, 'home.html', context)
+    return render(request, 'index.html', context)
+
+def voter_home(request, rollno):
+
+    
+
+    return HttpResponse("Welcom home {}".format(rollno))

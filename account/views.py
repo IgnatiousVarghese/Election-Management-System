@@ -53,27 +53,26 @@ def login(request):
             password = form.cleaned_data['password']
 
             if login_type == '1':
-                voter = Voter.objects.filter(pk=username)
+                rollno = username
+                voter = Voter.objects.filter(pk=rollno)
                 if len(voter) < 1:
                     return HttpResponse("Voter not found")
 
                 if password == voter[0].password:
-                    request.session['voter'] = username
+                    request.session['voter'] = rollno
                     request.session.set_expiry(300)
                     return redirect('home')
                 else:
                     return HttpResponse(" password incorrect")
 
             if login_type == '2':
-                voter = Voter.objects.filter(pk=username)
-                if len(voter) < 1:
-                    return HttpResponse("Voter not found")
-                candidate = Candidate.objects.filter(pk=username)
+                rollno = username
+                candidate = Candidate.objects.filter(pk=rollno)
                 if len(candidate) < 1:
                     return HttpResponse("candidate not found")
 
                 if password == candidate[0].voter.password:
-                    request.session['candidate'] = username
+                    request.session['candidate'] = rollno
                     request.session.set_expiry(300)
                     return redirect('home')
                 else:
