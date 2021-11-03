@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from election.settings import EMAIL_HOST_USER
+from election_site.settings import EMAIL_HOST_USER
 from .models import *
 from .forms import *
 import random
@@ -50,6 +50,7 @@ def login(request):
         if form.is_valid():
             login_type = form.cleaned_data['login_type']
             username = form.cleaned_data['username']
+            print("****************************{}".format(username))
             password = form.cleaned_data['password']
 
             if login_type == '1':
