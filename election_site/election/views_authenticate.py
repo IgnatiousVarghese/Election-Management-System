@@ -70,7 +70,7 @@ def login(request):
 
 			if login_type == '2':
 				rollno = username
-				candidate = Candidate.objects.filter(pk=rollno)
+				candidate = Candidate.objects.filter(voter__rollno=rollno)
 				if len(candidate) < 1:
 					return HttpResponse("candidate not found")
 
@@ -78,7 +78,7 @@ def login(request):
 					request.session['candidate'] = rollno
 					request.session['is_authenticated'] = True
 					request.session.set_expiry(300)
-					return redirect('index')
+					return redirect('election:home')
 				else:
 					return HttpResponse(" password incorrect")
 

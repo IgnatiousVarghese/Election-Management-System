@@ -55,7 +55,7 @@ def get_voter_details(request):
         USER['username'] = rollno
 		
         try:
-            c = Candidate.objects.get(pk=rollno)
+            c = Candidate.objects.get(voter__rollno=rollno)
             USER['candidate'] = c
         except:
             USER['is_authenticated'] = False
