@@ -30,7 +30,7 @@
 
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark  align-middle">
-        <a class="navbar-brand active" href="/">Home</a>
+        <a class="navbar-brand active" href="home">Home</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -55,19 +55,20 @@
                 <li class="nav-item">
                     <div class="nav-link">
                         Welcome !
-                        {% if is_logged_in %}
-                        {{ login_type }}{{ username }}
+                        {% if voter.is_authenticated %}
+                        hello
+                        {{voter.is_authenticated}}
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/logout">LogOut</a>
+                    <a class="nav-link" href="/logout">LogOut</a>
                 </li>
                         {% else %}
 
                 </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/login">Login</a>
+                    <a class="nav-link" href="/login">Login</a>
                 </li>
                 {% endif %}
 

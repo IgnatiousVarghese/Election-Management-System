@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        {{voter}}
+    </div>
+    <div class="container">
+        {{posts}}
+    </div>
+    <div class="container">
+        {{candidates}}
+    </div>
+    <div class="container">
+        {% for post in posts %}
+        <section class="jumbotron text-center">
+            <div class="container">
+              <h1 class="jumbotron-heading">
+                {{post.post_name}}
+              </h1>
+              <p class="lead text-muted">
+                {{post.desc}}
+              </p>
+              <p>
+                <a href="view-post/{{post.id}}" class="btn btn-primary my-2">Vote</a>
+              </p>
+            </div>
+            <div class="container">
+                
+                {{post.post_name}}
+                <br>
+                {{post.desc}}
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>candidate name</th>
+                            <th>manifesto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        {% if candidate.post_applied == post %}
+                        <tr>
+                            <td>
+                                {{candidate.voter.rollno}}
+                            </td>
+                            <td>
+                                {{candidate.manifesto}}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    
+                </table>
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+
+    {% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    {{voter}}
+</div>
+<div class="container">
+    {{info}}
+</div>
+
+<div class="container">
+    {% for post, candidates in info.items %}
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">
+                {{post.post_name}}
+            </h1>
+            <p class="lead text-muted">
+                {{post.desc}}
+            </p>
+        </div>
+        <div class="album py-5 bg-light">
+            <div class="container">
+
+                <div class="row">
+
+                    {% for candidate in candidates %}
+
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <h4 class="card-title">
+                                {{candidate.0.voter.first_name}}
+                                {{candidate.0.voter.last_name}}
+                            </h4>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    {{candidate.0.manifesto}}
+                                </p>
+                                <div class="btn-group">
+                                    <form action="/home/vote/{{post.id}}/{{candidate.0.voter_id}}" method="POST">
+                                        {% csrf_token %}
+                                        {% if candidate.1 %}
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            VOTED
+                                        </button>
+                                        {% else %}
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            vote
+                                        </button>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>candidate name</th>
+                        <th>manifesto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidate in candidates %}
+                    {% if candidate.0.post_applied == post %}
+                    <tr>
+                        <td>
+                            {{candidate.0.voter.rollno}}
+                        </td>
+                        <td>
+                            {{candidate.0.manifesto}}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </section>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
