@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    {{user}}
+</div>
+<div class="container">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">
+                {{ec.username}} 
+            </h1>
+        </div>
+        <p>
+            <form action="start-election/" method="post">
+                {% csrf_token %}
+                <input name="" id="" class="btn btn-success m-2" 
+                type="submit" value="Start election">
+            </form>
+            <form action="end-election/" method="post">
+                {% csrf_token %}
+                <input name="" id="" class="btn btn-danger m-2" 
+                type="submit" value="END election">
+            </form>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">
+            add post
+        </a>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">
+            add candidate
+        </a>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">
+            remove post
+        </a>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">
+            remove candidate
+        </a>
+        </p>
+    </section>
+</div>
+
+{% endblock %}

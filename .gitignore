@@ -1,0 +1,6 @@
+**/__pycache__/
+**/migrations/
+check.txt
+shell
+db.sqlite3
+.vscode

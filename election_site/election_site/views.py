@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from election.utils import get_voter_details
+from election.utils import get_user_details
 
 def index(request):
 
-    voter = get_voter_details(request)
+    voter = get_user_details(request)
     if voter['is_authenticated'] == True:
         return redirect('election:home')
     

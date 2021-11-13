@@ -1,5 +1,9 @@
 from .models import *
 
+# this function returns a python dictionary with
+# each post mapped with the vote of current voter for this particular post
+# if not voted has None value
+
 def vote_detail(voter):
     votes = Vote.objects.filter(voter = voter)
     detail = {}             ### type: Dict{Post:Candidate}
@@ -12,7 +16,13 @@ def vote_detail(voter):
 
     return detail
     
-def all_voter_election_info(voter):
+
+# this function returns a python dictionary with
+# each post mapped with all a tuple that contains 
+# 1. candidates applied for it,
+# 2. boolean value whether voter voted for that candidate
+
+def my_votes_info(voter):
     votes = Vote.objects.filter(voter = voter)
     detail = {}             ### type: Dict{Post:Candidate}
     posts = Post.objects.all()
@@ -27,7 +37,10 @@ def all_voter_election_info(voter):
 
     return detail
 
-def get_voter_details(request):
+# this function returns a python dictionary with
+# that contains all neccessary info on the user that is logged in. 
+
+def get_user_details(request):
     USER = {
         'is_authenticated': True,
         'is_candidate': False,
@@ -42,8 +55,8 @@ def get_voter_details(request):
         try:
             v = Voter.objects.get(rollno=rollno)
             USER['voter'] = v
-            USER['votes'] = vote_detail(v)
-            USER['all_voter_election_info'] = all_voter_election_info(v)
+            USER['my_votes'] = vote_detail(v)
+            USER['my_votes_info'] = my_votes_info(v)
         except:
             USER['is_authenticated'] = False
             return USER
