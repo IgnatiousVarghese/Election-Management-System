@@ -51,33 +51,47 @@
                 </li>
 
 
-
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <div class="nav-link">
+                    <a class="nav-link" href="#">
                         Welcome !
-                        {% if user.is_authenticated %}
+                        
                         hello
-                        {{user.is_authenticated}}
-                    </div>
+                        {{user.username}}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">LogOut</a>
                 </li>
-                        {% else %}
-
-                </div>
-                </li>
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 {% endif %}
 
-
-
         </ul>
-        </div>
+    </div>
 
     </nav>
+    <div class="container">
+        {% if messages %}
+        <div class="container">
+            {% for msg in messages %}
+            {% if msg.tags == "success" %}
+            <div class="alert alert-success" role="alert">
+                {{msg}}
+            </div>
+            {% endif %}
+            {% if msg.tags == "error" %}
+            <div class="alert alert-danger" role="alert">
+                {{msg}}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
     {% block content %}
 
     {% endblock %}

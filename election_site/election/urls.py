@@ -12,4 +12,7 @@ urlpatterns = [
 
     path('start-election/', views.start_election, name = 'start_election'),
     path('end-election/', views.end_election, name = 'end_election'),
+
+    path('add-candidate/', views.add_candidate, name = 'add_candidate'),
+    path('add-post/', views.add_post, name = 'add_post'),
 ]
