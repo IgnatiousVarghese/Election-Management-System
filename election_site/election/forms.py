@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
     login_type = forms.ChoiceField(
         choices=LOGIN_TYPE,
     )
-    username = forms.CharField(required=True)
+    username = forms.CharField(required=True,initial="Roll number")
     password = forms.CharField(required=True)
 
 class password_change(forms.Form):
