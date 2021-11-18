@@ -7,10 +7,16 @@ LOGIN_TYPE = [
     ('3', 'Election Cordinator')
 ]
 
-ALL_POST = []
-posts = Post.objects.all()
-for post in posts:
-    ALL_POST.append((post.id, post.post_name))
+###  
+###  can't write function which takes input from DB coz
+###  while making migration error appears.
+###  
+
+ALL_POST = [   
+    ('1', 'SAC'),
+    ('2', 'Mag'),
+    ('3', 'Hostel')
+]
 
 class LoginForm(forms.Form):
     login_type = forms.ChoiceField(
