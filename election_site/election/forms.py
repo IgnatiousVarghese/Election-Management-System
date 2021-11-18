@@ -16,7 +16,7 @@ class LoginForm(forms.Form):
     login_type = forms.ChoiceField(
         choices=LOGIN_TYPE,
     )
-    username = forms.CharField(required=True,initial="Roll number")
+    username = forms.CharField(required=True)
     password = forms.CharField(required=True)
 
 class password_change(forms.Form):
@@ -32,3 +32,11 @@ class AddCandidateForm(forms.Form):
 class AddPost(forms.Form):
     post_name = forms.CharField(required=True)
     desc = forms.CharField(required=True)
+
+class AddPost(forms.Form):
+    post_name = forms.CharField(required=True)
+    desc = forms.CharField(required=True)
+
+class SearchForm(forms.Form):
+    username = forms.CharField(required=True)
+    

@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from .utils import get_user_details
 from .models import *
-from .forms import AddCandidateForm, AddPost
+from .forms import AddCandidateForm, AddPost, SearchForm
 from datetime import datetime
 
 
@@ -58,13 +58,15 @@ def vote(request, idpost, idcandidate):
             candidate = Candidate.objects.get(voter_id=idcandidate)
             post = Post.objects.get(pk=idpost)
             already_voted = Vote.objects.filter(
-                voter=voter['voter']).filter(post=post)
-            if already_voted.exists():
-                already_voted[0].delete()
-            voter_vote = Vote(voter=voter['voter'],
-                              candidate=candidate, post=post)
-            print(voter_vote)
-            voter_vote.save()
+                voter=voter['voter']).filter(post=post
+                                             )
+            if not already_voted.exists():
+                voter_vote = Vote(voter=voter['voter'],
+                                  candidate=candidate, post=post)
+                print(voter_vote)
+                voter_vote.save()
+            else:
+                messages.error(request, "You Have already voted on this post")
         except:
             return HttpResponse("Some problem with Database\n plz contact admin.")
 
@@ -154,34 +156,35 @@ def end_election(request):
 
 def add_candidate(request):
     user_info = get_user_details(request)
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
     form = AddCandidateForm()
     if request.method == 'POST':
-        if user_info['is_authenticated'] and user_info['is_election_coordinator']:
-            ec = user_info['election_cordinator']
-            form = AddCandidateForm(request.POST)
-            if form.is_valid():
-                rollno = form.cleaned_data['rollno']
-                post_id = form.cleaned_data['post_applied']
-                manifesto = form.cleaned_data['manifesto']
-                if Voter.objects.filter(rollno=rollno).exists() and not Candidate.objects.filter(voter__rollno=rollno).exists():
-                    try:
-                        voter = Voter.objects.get(rollno=rollno)
-                        post = Post.objects.get(id=post_id)
-                        new_cand = Candidate(
-                            voter=voter, manifesto=manifesto, post_applied=post)
-                        new_cand.save()
-                        messages.success(request, "New candidate added!!")
-                        return redirect('election:home')
-                    except:
-                        messages.error(request, "rollno or post invalid")
-                        return redirect('election:home')
-                else:
-                    messages.error(
-                        request, "this voter is already a candidate")
+        ec = user_info['election_cordinator']
+        form = AddCandidateForm(request.POST)
+        if form.is_valid():
+            rollno = form.cleaned_data['rollno']
+            post_id = form.cleaned_data['post_applied']
+            manifesto = form.cleaned_data['manifesto']
+            if Voter.objects.filter(rollno=rollno).exists() and not Candidate.objects.filter(voter__rollno=rollno).exists():
+                try:
+                    voter = Voter.objects.get(rollno=rollno)
+                    post = Post.objects.get(id=post_id)
+                    new_cand = Candidate(
+                        voter=voter, manifesto=manifesto, post_applied=post)
+                    new_cand.save()
+                    messages.success(request, "New candidate added!!")
+                    return redirect('election:home')
+                except:
+                    messages.error(request, "rollno or post invalid")
+                    return redirect('election:home')
             else:
-                messages.error(request, "form not valid")
+                messages.error(
+                    request, "this voter is already a candidate")
         else:
-            messages.error(request, "user not authenticated")
+            messages.error(request, "form not valid")
+
     context = {
         'user': user_info,
         'form': form
@@ -191,31 +194,72 @@ def add_candidate(request):
 
 def add_post(request):
     user_info = get_user_details(request)
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
     form = AddPost()
     if request.method == 'POST':
-        if user_info['is_authenticated'] and user_info['is_election_coordinator']:
-            ec = user_info['election_cordinator']
-            form = AddPost(request.POST)
-            if form.is_valid():
-                post_name = form.cleaned_data['post_name']
-                desc = form.cleaned_data['desc']
-                try:
-                    post = Post(post_name = post_name, desc = desc)
-                    post.save()
-                    messages.success(request, "New POST added!!")
-                    return redirect('election:home')
-                except:                        
-                    messages.error(request, "post already exists or invalid")
-                    return redirect('election:home')
-            else:
-                messages.error(request, "form not valid")
+        ec = user_info['election_cordinator']
+        form = AddPost(request.POST)
+        if form.is_valid():
+            post_name = form.cleaned_data['post_name']
+            desc = form.cleaned_data['desc']
+            try:
+                post = Post(post_name=post_name, desc=desc)
+                post.save()
+                messages.success(request, "New POST added!!")
+                return redirect('election:home')
+            except:
+                messages.error(request, "post already exists or invalid")
+                return redirect('election:home')
         else:
-            messages.error(request, "user not authenticated")
+            messages.error(request, "form not valid")
     context = {
         'user': user_info,
         'form': form
     }
     return render(request, 'election_coordinator/add-post.html', context)
+
+
+def search_candidate(request):
+    user_info = get_user_details(request)
+    form = SearchForm()
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            rollno = form.cleaned_data['username']
+            try:
+                candidate = Candidate.objects.get(voter__rollno=rollno)
+                messages.success(request, "Candidate Found")
+                context = {
+                    'user': user_info,
+                    'form': form,
+                    'candidate': candidate
+                }
+                return render(request, 'election_coordinator/search-candidate.html', context)
+            except:
+                messages.error(request, "Candidate Not found")
+        else:
+            messages.error(request, "Input invalid")
+    context = {
+        'user': user_info,
+        'form': form,
+    }
+    return render(request, 'election_coordinator/search-candidate.html', context)
+
+def del_candidate(request):
+    user_info = get_user_details(request)
     
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
 
-
+    if request.method == 'POST':
+        rollno = request.POST['rollno']
+        print("********************************************")
+        print(rollno)
+    return redirect('election:search_candidate')

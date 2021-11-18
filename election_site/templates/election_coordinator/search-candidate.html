@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% for err in form.errors %}
+    {{err}}
+    {% endfor %}
+
+    {{form}}
+
+    <input type="submit" value="Search Candidate">
+</form>
+
+{% if candidate %}
+
+<div class="container">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">
+                {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+            </h1>
+            <p class="lead text-muted">
+                {{candidate.voter.rollno}}
+            </p>
+            <p class="lead text-muted">
+                {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+            </p>
+            <p class="lead text-muted">
+                {{candidate.post_applied.post_name}}
+            </p>
+            <p class="lead text">
+                {{candidate.manifesto}}
+            </p>
+        </div>
+        <form action="/home/del-candidate/" method="post">
+            <input type="hidden" name="rollno" value = {{candidate.voter.rollno}}>
+            <input class="btn btn-danger" type="submit" value="Delete Candidate">
+        </form>
+    </section>
+</div>
+
+{% endif %}
+
+{% endblock %}

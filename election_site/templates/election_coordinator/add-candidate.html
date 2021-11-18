@@ -2,14 +2,11 @@
 
 {% block content %}
 
-<form action="" method="post">
-    {% if error %}
-    <p class="text-danger">
-        {{error}}
-    </p>
-    {% endif %}
-    
+<form action="search-candidate/" method="post">
     {% csrf_token %}
+    {% for err in form.errors %}
+    {{err}}
+    {% endfor %}
 
     {{form}}
 

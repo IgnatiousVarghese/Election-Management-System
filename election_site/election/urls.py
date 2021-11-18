@@ -15,4 +15,6 @@ urlpatterns = [
 
     path('add-candidate/', views.add_candidate, name = 'add_candidate'),
     path('add-post/', views.add_post, name = 'add_post'),
+
+    path('search-candidate/', views.search_candidate, name = 'search_candidate'),
 ]
