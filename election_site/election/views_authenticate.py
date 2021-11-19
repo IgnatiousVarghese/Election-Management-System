@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.http import HttpResponse
 from election_site.settings import EMAIL_HOST_USER
 from .models import *
@@ -17,15 +18,19 @@ def get_password(request):
 			password = random.randint(1, 10000)
 			voters = Voter.objects.filter(email=email)
 			if len(voters) < 1:
-				context['error'] = "email not in database"
+				messages.error(request, "Voter not Database")
 				context['form'] = form
 				return render(request, 'account/get_password.html', context)
 			voter = voters[0]
 			voter.password = password
-			voter.save()
+			try:
+				voter.save()
+				messages.success(request, f"Password of {voter.rollno} changed.")
+			except:
+				messages.error(request, "Password unable to change.")
 
 			subject = 'Password Changed'
-			message = 'new password is {0}'.format(password)
+			message = 'New password is {0}'.format(password)
 			recepient = str(email)
 			send_mail(
 				subject,
@@ -35,7 +40,7 @@ def get_password(request):
 				fail_silently=False
 			)
 		else:
-			context['error'] = "input invalid"
+			messages.error(request, "input invalid")
 	else:
 		context['form'] = form
 		return render(request, 'account/get_password.html', context)
@@ -50,54 +55,62 @@ def login(request):
 		if form.is_valid():
 			login_type = form.cleaned_data['login_type']
 			username = form.cleaned_data['username']
-			print("****************************Login request for {}********************************".format(username))
 			password = form.cleaned_data['password']
 
 			if login_type == '1':
 				rollno = username
-				voter = Voter.objects.filter(pk=rollno)
-				if len(voter) < 1:
-					return HttpResponse("Voter not found")
+				try:
+					voter = Voter.objects.get(pk=rollno)
 
-				if password == voter[0].password:
-					request.session['voter'] = rollno
-					request.session['is_authenticated'] = True
-					request.session.set_expiry(30000)					
-					print("****************************Login request for {} ACCEPTED********************************".format(username))
-					return redirect('election:home')
-				else:
-					return HttpResponse(" password incorrect")
+					if password == voter.password:
+						request.session['voter'] = rollno
+						request.session['is_authenticated'] = True
+						request.session.set_expiry(30000)
+						messages.success(request, "successfully logged in as Voter")				
+						return redirect('election:home')
+					else:
+						messages.error(request, "Password incorrect")
+				except:
+					messages.error(request, "Voter not found in Database")
 
-			if login_type == '2':
+			elif login_type == '2':
 				rollno = username
-				candidate = Candidate.objects.filter(voter__rollno=rollno)
-				if len(candidate) < 1:
-					return HttpResponse("candidate not found")
+				try:
+					candidate = Candidate.objects.get(voter__rollno=rollno)
 
-				if password == candidate[0].voter.password:
-					request.session['candidate'] = rollno
-					request.session['is_authenticated'] = True
-					request.session.set_expiry(300)
-					return redirect('election:home')
-				else:
-					return HttpResponse(" password incorrect")
+					if password == candidate.voter.password:
+						request.session['candidate'] = rollno
+						request.session['is_authenticated'] = True
+						request.session.set_expiry(300)
+						messages.success(request, "successfully logged in as Candidate")
+						return redirect('election:home')
+					else:
+						messages.error(request, "Password incorrect")
+				except:
+					messages.error(request, "Candidate not found in Database")
 
-			if login_type == '3':
-				cordinators = Election_Coordinator.objects.filter(
-					username=username)
-				if len(cordinators) < 1:
-					return HttpResponse("cordinators not found")
-
-				if password == cordinators[0].password:
-					request.session['election_cordinator'] = username
-					request.session['is_authenticated'] = True
-					request.session.set_expiry(300)
-					return redirect('index')
-				else:
-					return HttpResponse(" password incorrect")
+			elif login_type == '3':
+				try:
+					ec = Election_Coordinator.objects.get(
+						username=username
+						)
+					print(username)
+					if password == ec.password:
+						request.session['election_cordinator'] = username
+						request.session['is_authenticated'] = True
+						request.session.set_expiry(300)
+						messages.success(request, "successfully logged in as EC")
+						return redirect('election:home')
+					else:
+						messages.error(request, "Password incorrect")
+				except:
+					messages.error(request, "EC not found in Database")
+			
+			else:
+				messages.error(request, "Login type not accepted")
 
 		else:
-			return HttpResponse(request)
+			messages.error(request, "Form input not valid")
 
 	context = {
 		'form': form
