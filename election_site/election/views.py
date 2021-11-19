@@ -165,20 +165,19 @@ def add_candidate(request):
         form = AddCandidateForm(request.POST)
         if form.is_valid():
             rollno = form.cleaned_data['rollno']
-            post_id = form.cleaned_data['post_applied']
+            post = form.cleaned_data['post_applied']
             manifesto = form.cleaned_data['manifesto']
             if Voter.objects.filter(rollno=rollno).exists() and not Candidate.objects.filter(voter__rollno=rollno).exists():
                 try:
                     voter = Voter.objects.get(rollno=rollno)
-                    post = Post.objects.get(id=post_id)
                     new_cand = Candidate(
                         voter=voter, manifesto=manifesto, post_applied=post)
                     new_cand.save()
                     messages.success(request, "New candidate added!!")
                     return redirect('election:home')
                 except:
-                    messages.error(request, "rollno or post invalid")
-                    return redirect('election:home')
+                    messages.error(request, "rollno or post invalid OR voter already candidate")
+                    return redirect('election:add_candidate')
             else:
                 messages.error(
                     request, "this voter is already a candidate")
@@ -260,6 +259,54 @@ def del_candidate(request):
 
     if request.method == 'POST':
         rollno = request.POST['rollno']
-        print("********************************************")
-        print(rollno)
+        try:
+            candidate = Candidate.objects.get(voter__rollno=rollno)
+            candidate.delete()
+            messages.success(request, "Candidate successfully deleted")
+        except:
+            messages.error(request, "Candidate could't be deleted")
+
     return redirect('election:search_candidate')
+
+def search_post(request):
+    user_info = get_user_details(request)
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
+
+    if request.method == 'POST':
+        post_name = request.POST['post_name']
+        if post_name:
+            try:
+                post = Post.objects.get(post_name=post_name)
+                messages.success(request, "Post Found")
+                context = {
+                    'user': user_info,
+                    'post': post
+                }
+                return render(request, 'election_coordinator/search-post.html', context)
+            except:
+                messages.error(request, "Post Not found")
+        else:
+            messages.error(request, "Input invalid")
+    context = {
+        'user': user_info,
+    }
+    return render(request, 'election_coordinator/search-post.html', context)
+
+def del_post(request):
+    user_info = get_user_details(request)
+    
+    if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
+        messages.error(request, "user not authenticated")
+        return redirect('index')
+
+    if request.method == 'POST':
+        post_id = request.POST['post_id']
+        try:
+            post = Post.objects.get(id = post_id)
+            post.delete()
+            messages.success(request, "Post successfully deleted")
+        except:
+            messages.error(request, "Post could't be deleted")
+    return redirect('election:search_post')

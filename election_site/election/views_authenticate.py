@@ -62,7 +62,7 @@ def login(request):
 				if password == voter[0].password:
 					request.session['voter'] = rollno
 					request.session['is_authenticated'] = True
-					request.session.set_expiry(3000)					
+					request.session.set_expiry(30000)					
 					print("****************************Login request for {} ACCEPTED********************************".format(username))
 					return redirect('election:home')
 				else:

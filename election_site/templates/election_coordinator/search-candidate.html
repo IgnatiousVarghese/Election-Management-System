@@ -36,6 +36,7 @@
             </p>
         </div>
         <form action="/home/del-candidate/" method="post">
+            {% csrf_token %}
             <input type="hidden" name="rollno" value = {{candidate.voter.rollno}}>
             <input class="btn btn-danger" type="submit" value="Delete Candidate">
         </form>
