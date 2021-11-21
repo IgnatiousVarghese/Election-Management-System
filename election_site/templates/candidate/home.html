@@ -1,29 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
-    {{candidate}}
-</div>
+
 <div class="container">
-    {{post}}
-</div>
-<div class="container">
-    <section class="jumbotron text-center">
+    <section class="jumbotron text-left">
         <div class="container">
-            <h1 class="jumbotron-heading">
-                {{candidate.voter.first_name}} {{candidate.voter.last_name}}
-            </h1>
-            <p class="lead text-muted">
-                {{candidate.voter.rollno}}
-            </p>
-            <p class="lead text-muted">
-                {{post.post_name}}
-            </p>
+            <h4 class="jumbotron-heading">
+                Name    : {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+            </h4>
+            <h4 >
+                Roll No : {{candidate.voter.rollno}}
+            </h4>
+            <h4 >
+                Post    : {{post.post_name}}
+            </h4>
         </div>
         <p>
         <div class="form-group">
             <form action="edit-manifesto/" method="post">
                 {% csrf_token %}
-                <label for="manifesto">Manifesto :</label>
+                <label for="manifesto"><h4>Manifesto :</h4></label>
                 <textarea class="form-control" name="manifesto" id="manifesto" cols="10"
                     rows="5">{{candidate.manifesto}}</textarea>
                 <button type="submit" class="btn btn-primary my-2">Edit Manifesto</button>
