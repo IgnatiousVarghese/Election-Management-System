@@ -2,14 +2,16 @@
 
 
 {% block content %}
+{% if method == 'GET'%}
 
-<form action="" method="post">
-    {% csrf_token %}
-    <label for="post_name">Post name</label>
-    <input type="text" name="post_name" id="post_name">
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="post_name">Post name</label>
+        <input type="text" name="post_name" id="post_name">
 
-    <input type="submit" value="Search Post">
-</form>
+        <input type="submit" value="Search Post">
+    </form>
+{%endif%}
 
 {% if post %}
 
