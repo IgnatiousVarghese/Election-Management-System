@@ -9,7 +9,7 @@ from datetime import datetime
 def home(request):
     USER = get_user_details(request)
     if USER['is_authenticated'] == False:
-        return HttpResponse("you are not supposed to be here LOL get lost!!!!!!")
+        return redirect('login')
 
     elif(USER['account_type'] == 'Voter'):
         return voter_home(request, USER)
@@ -20,7 +20,7 @@ def home(request):
     elif USER['account_type'] == 'Election_Coordinator':
         return election_coordinator_home(request, USER)
 
-    return HttpResponse("you are not supposed to be here LOL get lost!!!!!!")
+    return HttpResponse("ERROR!!!!!!")
 
 
 def voter_home(request, voter):
