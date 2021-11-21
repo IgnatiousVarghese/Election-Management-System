@@ -28,20 +28,25 @@ def index(request):
 #               'candidate' :<candidate> , 
 #               'vote_count' : <vote_count>
 #             }
-#         ]
+#         ],
+#         'candidate_names' : [<candidate_names>],
+#         'candidate_vote_counts' : [candidate_vote_counts
+# s],
 #     },
 # ]
 
 def get_vote_count():
     VOTE_COUNT = []
     for post in Post.objects.all():
-        post_deatils = {}
-        post_deatils['post'] = post
+        post_details = {}
+        post_details['post'] = post
+        post_details['candidate_names']= []
+        post_details['candidate_vote_counts']= []
 
         if not Candidate.objects.filter(post_applied = post).exists():
-            post_deatils['winning_candidate'] = None
-            post_deatils['reason'] = "No Candidate Competing"
-            VOTE_COUNT.append(post_deatils)
+            post_details['winning_candidate'] = None
+            post_details['reason'] = "No Candidate Competing"
+            VOTE_COUNT.append(post_details)
             continue
 
         total_votes = Vote.objects.filter(post=post).count()
@@ -49,13 +54,10 @@ def get_vote_count():
             'candidate').annotate(
                 no_of_votes=Count('candidate')).order_by('-no_of_votes')
 
-        # VOTE_COUNT[post]['winner']
-        post_deatils['winning_candidate'] = [
+        post_details['winning_candidate'] = [
                 Candidate.objects.get(id=vote_count.first()['candidate']),
                 vote_count.first()['no_of_votes'],
             ]
-
-        # VOTE_COUNT[post]['votes_for_each_candidate']
         
         votes_for_each_candidate = []
         for x in vote_count:
@@ -66,18 +68,41 @@ def get_vote_count():
                 'vote_count': count
             }
             votes_for_each_candidate.append(cand_info)
+            post_details['candidate_names'].append(
+                str(candidate.voter.first_name + candidate.voter.last_name)
+                )
+            post_details['candidate_vote_counts'].append(count)
 
-        post_deatils['votes_for_each_candidate'] = votes_for_each_candidate
 
-        VOTE_COUNT.append(post_deatils)
+        post_details['votes_for_each_candidate'] = votes_for_each_candidate
+
+        VOTE_COUNT.append(post_details)
 
     return VOTE_COUNT
 
 
 def result(request):
     result = get_vote_count()
+    posts = Post.objects.all()
+    post_id = []
+    for post in posts:
+        post_id.append(str(post.id))
+
+    all_candidate_names = []
+    all_candidate_vote_counts = []
+    for x in result:
+        all_candidate_names.append(x['candidate_names'])
+        all_candidate_vote_counts.append(
+            x['candidate_vote_counts']
+        )
+
     context = {
         'result': result,   
         # result --> VOTE_COUNT
+        'labels': ['January', 'February', 'March', 'April', 'May'],
+        'data' : [48, -63, 81, 11, 70],
+        'post_id' : post_id,
+        'all_candidate_names' : all_candidate_names,
+        'all_candidate_vote_counts' : all_candidate_vote_counts,
     }
     return render(request, 'result.html', context = context)

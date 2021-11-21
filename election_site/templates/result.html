@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+{{post_id |json_script:'post_id'}}
+{{all_candidate_names |json_script:'all_candidate_names'}}
+{{all_candidate_vote_counts |json_script:'all_candidate_vote_counts'}}
+
 <div class="container">
     {% for x in result %}
     <section class="jumbotron text-center">
@@ -8,7 +12,7 @@
                 {{x.post.post_name}}
             </h1>
             <p class="lead text-muted">
-                {{x.post.desc}}
+                {{x.post.id}}
             </p>
         </div>
         <div class="container">
@@ -17,9 +21,17 @@
             <h2 class="lead text-muted">
                 Winnning Candidate : {{x.winning_candidate.0}}
             </h2>
-            <h2 class="lead text-muted">                
+            <h2 class="lead text-muted">
                 Votes received : {{x.winning_candidate.1}}
             </h2>
+
+
+            <div>
+                <canvas id="{{x.post.id}}_chart" width="800" height="800" style="margin: auto;"></canvas>
+            </div>
+
+
+
             <table class="table table-bordered">
                 <thead class="thead-dark">
                     <tr>
@@ -50,5 +62,47 @@
     </section>
     {% endfor %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script>
+    window.onload = function () {
+
+        var post_ids = JSON.parse(document.getElementById('post_id').textContent);
+        var all_candidate_names = JSON.parse(document.getElementById(
+            'all_candidate_names').textContent);
+        var all_candidate_vote_counts = JSON.parse(document.getElementById(
+            'all_candidate_vote_counts').textContent);
+
+        for (var i = 0; i < post_ids.length; i++) {
+
+            var labels = all_candidate_names[i];
+            var data = all_candidate_vote_counts[i];
+
+            var config = {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'A random dataset',
+                            data: data,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: false
+                }
+            };
+            var ctx = document.getElementById(post_ids[i] + '_chart').getContext('2d');
+            window.myLine = new Chart(ctx, config);
+        }
+    };
+</script>
 
 {% endblock %}
