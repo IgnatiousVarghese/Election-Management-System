@@ -114,35 +114,3 @@ def get_vote_stat():
     }
     return vote_stat
 
-
-# return VOTE_COUNT = {  ##py dict
-#     <post> : (    ##py tuple
-#         <winning_candidate>, {    ##py dict
-#             <each_candidate> : <vote_count>
-#         }
-#     )
-# }
-def get_vote_count():
-    VOTE_COUNT = {}
-    for post in Post.objects.all():
-        # VOTE_COUNT[post]
-        total_votes = Vote.objects.filter(post=post).count()
-        vote_count = Vote.objects.filter(post=post).values(
-            'candidate').annotate(
-                no_of_votes=Count('candidate')).order_by('-no_of_votes')
-
-        VOTE_COUNT[post] = {
-            'winner': Candidate.objects.get(
-                id=vote_count[0]['candidate'])
-        }
-
-        # VOTE_COUNT['votes_for_each_candidate']
-        votes_for_each_candidate = {}
-        for x in vote_count:
-            candidate_id, count = x['candidate'], x['no_of_votes']
-            candidate = Candidate.objects.get(id=candidate_id)
-            votes_for_each_candidate[candidate] = count
-
-        VOTE_COUNT[post]['votes_for_each_candidate'] = votes_for_each_candidate
-
-    return VOTE_COUNT

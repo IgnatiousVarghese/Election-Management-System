@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    {% for x in result %}
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">
+                {{x.post.post_name}}
+            </h1>
+            <p class="lead text-muted">
+                {{x.post.desc}}
+            </p>
+        </div>
+        <div class="container">
+            {% if x.winning_candidate %}
+
+            <h2 class="lead text-muted">
+                Winnning Candidate : {{x.winning_candidate.0}}
+            </h2>
+            <h2 class="lead text-muted">                
+                Votes received : {{x.winning_candidate.1}}
+            </h2>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>candidate name</th>
+                        <th>Votes received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for y in x.votes_for_each_candidate %}
+                    <tr>
+                        <td>
+                            {{y.candidate.voter.first_name}} {{y.candidate.voter.last_name}}
+                        </td>
+                        <td>
+                            {{y.vote_count}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+            {% else %}
+            <h2 class="lead text-muted">
+                {{x.reason}}
+            </h2>
+            {% endif %}
+        </div>
+    </section>
+    {% endfor %}
+</div>
+
+{% endblock %}

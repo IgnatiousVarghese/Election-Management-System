@@ -13,4 +13,6 @@ urlpatterns = [
     path('get_password/' , views_authenticate.get_password, name = 'get_password'),
     
     path('home/', include('election.urls')),
+    
+    path('result/', views.result, name = 'result'),
 ]
