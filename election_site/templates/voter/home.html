@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div>
-        {{voter}}
-    </div>
-    <div class="container">
-        {{posts}}
-    </div>
-    <div class="container">
-        {{candidates}}
-    </div>
+    
     <div class="container">
         {% for post in posts %}
         <section class="jumbotron text-center">

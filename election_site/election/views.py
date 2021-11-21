@@ -177,7 +177,7 @@ def add_candidate(request):
                     return redirect('election:home')
                 except:
                     messages.error(request, "rollno or post invalid OR voter already candidate")
-                    return redirect('election:add_candidate')
+                    return redirect('election:home')
             else:
                 messages.error(
                     request, "this voter is already a candidate")
@@ -237,7 +237,8 @@ def search_candidate(request):
                 context = {
                     'user': user_info,
                     'form': form,
-                    'candidate': candidate
+                    'candidate': candidate,
+                    
                 }
                 return render(request, 'election_coordinator/search-candidate.html', context)
             except:
@@ -247,6 +248,7 @@ def search_candidate(request):
     context = {
         'user': user_info,
         'form': form,
+        'method' : request.method,
     }
     return render(request, 'election_coordinator/search-candidate.html', context)
 
@@ -266,7 +268,7 @@ def del_candidate(request):
         except:
             messages.error(request, "Candidate could't be deleted")
 
-    return redirect('election:search_candidate')
+    return redirect('election:home')
 
 def search_post(request):
     user_info = get_user_details(request)
@@ -291,6 +293,7 @@ def search_post(request):
             messages.error(request, "Input invalid")
     context = {
         'user': user_info,
+        'method': request.method,
     }
     return render(request, 'election_coordinator/search-post.html', context)
 
@@ -309,4 +312,4 @@ def del_post(request):
             messages.success(request, "Post successfully deleted")
         except:
             messages.error(request, "Post could't be deleted")
-    return redirect('election:search_post')
+    return redirect('election:home')

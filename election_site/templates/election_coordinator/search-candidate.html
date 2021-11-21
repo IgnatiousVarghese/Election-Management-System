@@ -2,6 +2,7 @@
 
 
 {% block content %}
+{% if method == 'GET'%}
 
 <form action="" method="post">
     {% csrf_token %}
@@ -13,6 +14,8 @@
 
     <input type="submit" value="Search Candidate">
 </form>
+{%endif%}
+
 
 {% if candidate %}
 
@@ -20,20 +23,15 @@
     <section class="jumbotron text-center">
         <div class="container">
             <h1 class="jumbotron-heading">
-                {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+                Name : {{candidate.voter.first_name}} {{candidate.voter.last_name}}
             </h1>
             <p class="lead text-muted">
-                {{candidate.voter.rollno}}
+                Roll No: {{candidate.voter.rollno}}
             </p>
             <p class="lead text-muted">
-                {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+                Post : {{candidate.post_applied.post_name}}
             </p>
-            <p class="lead text-muted">
-                {{candidate.post_applied.post_name}}
-            </p>
-            <p class="lead text">
-                {{candidate.manifesto}}
-            </p>
+            
         </div>
         <form action="/home/del-candidate/" method="post">
             {% csrf_token %}
