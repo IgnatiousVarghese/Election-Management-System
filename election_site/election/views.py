@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
-from .utils import get_user_details
+from .utils import get_user_details, get_vote_stat
 from .models import *
 from .forms import AddCandidateForm, AddPost, SearchForm
 from datetime import datetime
@@ -101,6 +101,7 @@ def election_coordinator_home(request, election_coordinator_info):
     context = {
         'user': election_coordinator_info,
         'ec': ec,
+        'vote_stat': get_vote_stat()
     }
     return render(request, 'election_coordinator/home.html', context)
 
@@ -129,7 +130,6 @@ def start_election(request):
     }
     return render(request, 'error.html', context=context)
 
-
 def end_election(request):
     error = []
     if request.method == 'POST':
@@ -152,7 +152,6 @@ def end_election(request):
         'back': 'election:home',
     }
     return render(request, 'error.html', context=context)
-
 
 def add_candidate(request):
     user_info = get_user_details(request)
@@ -190,7 +189,6 @@ def add_candidate(request):
     }
     return render(request, 'election_coordinator/add-candidate.html', context=context)
 
-
 def add_post(request):
     user_info = get_user_details(request)
     if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
@@ -218,7 +216,6 @@ def add_post(request):
         'form': form
     }
     return render(request, 'election_coordinator/add-post.html', context)
-
 
 def search_candidate(request):
     user_info = get_user_details(request)
@@ -310,3 +307,4 @@ def del_post(request):
         except:
             messages.error(request, "Post could't be deleted")
     return redirect('election:search_post')
+

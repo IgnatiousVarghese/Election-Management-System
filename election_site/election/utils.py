@@ -1,52 +1,57 @@
+from django.db.models.aggregates import Count
 from .models import *
 
 # this function returns a python dictionary with
 # each post mapped with the vote of current voter for this particular post
 # if not voted has None value
 
+
 def vote_detail(voter):
-    votes = Vote.objects.filter(voter = voter)
-    detail = {}             ### type: Dict{Post:Candidate}
+    votes = Vote.objects.filter(voter=voter)
+    detail = {}
+    # type: Dict{Post:Candidate}
     posts = Post.objects.all()
     for p in posts:
         detail[p] = None
-        p_vote = votes.filter(post = p)
+        p_vote = votes.filter(post=p)
         if p_vote.exists():
             detail[p] = p_vote[0]
 
     return detail
-    
 
 # this function returns a python dictionary with
-# each post mapped with all a tuple that contains 
+# each post mapped with all a tuple that contains
 # 1. candidates applied for it,
 # 2. boolean value whether voter voted for that candidate
 
+
 def my_votes_info(voter):
-    votes = Vote.objects.filter(voter = voter)
-    detail = {}             ### type: Dict{Post:Candidate}
+    votes = Vote.objects.filter(voter=voter)
+    detail = {}
+    # type: Dict{Post:Candidate}
     posts = Post.objects.all()
     for p in posts:
         detail[p] = []
-        candidates = Candidate.objects.filter(post_applied = p)
+        candidates = Candidate.objects.filter(post_applied=p)
         for c in candidates:
-            if votes.filter(candidate = c).exists():
-                detail[p].append((c,True))
+            if votes.filter(candidate=c).exists():
+                detail[p].append((c, True))
             else:
-                detail[p].append((c,False))
+                detail[p].append((c, False))
 
     return detail
 
 # this function returns a python dictionary with
-# that contains all neccessary info on the user that is logged in. 
+# that contains all neccessary info on the user that is logged in.
+
 
 def get_user_details(request):
     USER = {
         'is_authenticated': True,
         'is_candidate': False,
         'is_election_coordinator': False,
-        'account_type' : None,
-        'username' : None,
+        'account_type': None,
+        'username': None,
     }
     if request.session.has_key('voter'):
         USER['account_type'] = 'Voter'
@@ -66,7 +71,7 @@ def get_user_details(request):
         USER['is_candidate'] = True
         rollno = request.session['candidate']
         USER['username'] = rollno
-		
+
         try:
             c = Candidate.objects.get(voter__rollno=rollno)
             USER['candidate'] = c
@@ -90,3 +95,54 @@ def get_user_details(request):
         USER['is_authenticated'] = False
 
     return USER
+
+
+#
+# return stats of vote (count of how many voted)
+# during election
+#
+def get_vote_stat():
+    voter_vote_count = Vote.objects.values(
+        'voter').annotate(vote_count=Count('voter'))
+    # <QuerySet [{'voter': , 'vote_count': }]>
+    total_voters = Voter.objects.all().count()
+    total_voters_voted = voter_vote_count.count()
+    vote_stat = {
+        'voter_vote_count': voter_vote_count,
+        'total_voters': total_voters,
+        'total_voters_voted': total_voters_voted,
+    }
+    return vote_stat
+
+
+# return VOTE_COUNT = {  ##py dict
+#     <post> : (    ##py tuple
+#         <winning_candidate>, {    ##py dict
+#             <each_candidate> : <vote_count>
+#         }
+#     )
+# }
+def get_vote_count():
+    VOTE_COUNT = {}
+    for post in Post.objects.all():
+        # VOTE_COUNT[post]
+        total_votes = Vote.objects.filter(post=post).count()
+        vote_count = Vote.objects.filter(post=post).values(
+            'candidate').annotate(
+                no_of_votes=Count('candidate')).order_by('-no_of_votes')
+
+        VOTE_COUNT[post] = {
+            'winner': Candidate.objects.get(
+                id=vote_count[0]['candidate'])
+        }
+
+        # VOTE_COUNT['votes_for_each_candidate']
+        votes_for_each_candidate = {}
+        for x in vote_count:
+            candidate_id, count = x['candidate'], x['no_of_votes']
+            candidate = Candidate.objects.get(id=candidate_id)
+            votes_for_each_candidate[candidate] = count
+
+        VOTE_COUNT[post]['votes_for_each_candidate'] = votes_for_each_candidate
+
+    return VOTE_COUNT
