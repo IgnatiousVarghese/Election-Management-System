@@ -10,7 +10,7 @@ def index(request):
         return redirect('election:home')
     
     context = {
-        'voter' : voter,
+        'user' : voter,
     }
 
     return render(request, 'index.html', context)
@@ -37,6 +37,7 @@ def index(request):
 
 def get_vote_count():
     VOTE_COUNT = []
+    total_voters = Voter.objects.all().count()
     for post in Post.objects.all():
         post_details = {}
         post_details['post'] = post
@@ -72,6 +73,14 @@ def get_vote_count():
                 str(candidate.voter.first_name + candidate.voter.last_name)
                 )
             post_details['candidate_vote_counts'].append(count)
+        
+        # details of votes not cast
+        votes_for_each_candidate.append({
+            'candidate': None,
+            'vote_count': total_voters - total_votes,
+        })
+        post_details['candidate_names'].append('None')
+        post_details['candidate_vote_counts'].append(total_voters - total_votes)
 
 
         post_details['votes_for_each_candidate'] = votes_for_each_candidate
@@ -99,8 +108,7 @@ def result(request):
     context = {
         'result': result,   
         # result --> VOTE_COUNT
-        'labels': ['January', 'February', 'March', 'April', 'May'],
-        'data' : [48, -63, 81, 11, 70],
+        'user' : get_user_details(request),
         'post_id' : post_id,
         'all_candidate_names' : all_candidate_names,
         'all_candidate_vote_counts' : all_candidate_vote_counts,

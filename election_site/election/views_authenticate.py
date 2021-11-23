@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.http import HttpResponse
 from election_site.settings import EMAIL_HOST_USER
@@ -32,13 +33,17 @@ def get_password(request):
 			subject = 'Password Changed'
 			message = 'New password is {0}'.format(password)
 			recepient = str(email)
-			send_mail(
-				subject,
-				message,
-				EMAIL_HOST_USER,
-				[recepient],
-				fail_silently=False
-			)
+			try:
+				send_mail(
+					subject,
+					message,
+					EMAIL_HOST_USER,
+					[recepient],
+					fail_silently=False
+				)				
+				messages.success(request, f"New password send to {email}.")
+			except:
+				messages.error(request, f"New password unable to send to {email}. Plz Contact EC.")
 		else:
 			messages.error(request, "input invalid")
 	else:
@@ -57,37 +62,53 @@ def login(request):
 			username = form.cleaned_data['username']
 			password = form.cleaned_data['password']
 
-			if login_type == '1':
-				rollno = username
-				try:
-					voter = Voter.objects.get(pk=rollno)
+			election_time = Election_Coordinator.objects.values('start_time','end_time').first()
+			start_time =election_time['start_time']
+			end_time =election_time['end_time']
 
-					if password == voter.password:
-						request.session['voter'] = rollno
-						request.session['is_authenticated'] = True
-						request.session.set_expiry(30000)
-						messages.success(request, "successfully logged in as Voter")				
-						return redirect('election:home')
-					else:
-						messages.error(request, "Password incorrect")
-				except:
-					messages.error(request, "Voter not found in Database")
+			if login_type == '1':
+				if start_time and not end_time:
+					# checking whether election is currently  ongoing or not
+					rollno = username
+					try:
+						voter = Voter.objects.get(pk=rollno)
+
+						if password == voter.password:
+							request.session['voter'] = rollno
+							request.session['is_authenticated'] = True
+							request.session.set_expiry(30000)
+							messages.success(request, "successfully logged in as Voter")				
+							return redirect('election:home')
+						else:
+							messages.error(request, "Password incorrect")
+					except:
+						messages.error(request, "Voter not found in Database")
+				elif start_time and end_time:
+					messages.success(request, "Election Over. No need to login")
+					return redirect('result')
+				else:
+					messages.error(request, "Election NOT started yet")
+					return redirect('index')
 
 			elif login_type == '2':
-				rollno = username
-				try:
-					candidate = Candidate.objects.get(voter__rollno=rollno)
+				if not start_time:
+					# login for candidate only available before election start.
+					rollno = username
+					try:
+						candidate = Candidate.objects.get(voter__rollno=rollno)
 
-					if password == candidate.voter.password:
-						request.session['candidate'] = rollno
-						request.session['is_authenticated'] = True
-						request.session.set_expiry(300)
-						messages.success(request, "successfully logged in as Candidate")
-						return redirect('election:home')
-					else:
-						messages.error(request, "Password incorrect")
-				except:
-					messages.error(request, "Candidate not found in Database")
+						if password == candidate.voter.password:
+							request.session['candidate'] = rollno
+							request.session['is_authenticated'] = True
+							request.session.set_expiry(300)
+							messages.success(request, "successfully logged in as Candidate")
+							return redirect('election:home')
+						else:
+							messages.error(request, "Password incorrect")
+					except:
+						messages.error(request, "Candidate not found in Database")
+				else:
+					messages.error(request, "Election Started, So can't edit your manifesto")
 
 			elif login_type == '3':
 				try:
@@ -119,6 +140,8 @@ def login(request):
 
 
 def logout(request):
+	if request.user.is_authenticated:
+		auth_logout(request.user)
 	if request.method == "GET":
 		if request.session.has_key('is_authenticated'):
 			del request.session['is_authenticated']

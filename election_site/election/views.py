@@ -107,7 +107,6 @@ def election_coordinator_home(request, election_coordinator_info):
 
 
 def start_election(request):
-    error = []
     if request.method == 'POST':
         ec_info = get_user_details(request)
         if ec_info['is_authenticated'] and ec_info['is_election_coordinator']:
@@ -115,20 +114,17 @@ def start_election(request):
             if ec.start_time == None:
                 ec.start_time = datetime.now()
                 ec.save()
+                messages.success(request, f"Election have officially began. time : {ec.start_time}")
                 return redirect('election:home')
             else:
-                error.append(
-                    'start-time already set & election already started')
+                messages.error(request , "start-time already set & election already started")
+                
         else:
-            error.append("user isn't authenticated")
+            messages.error("user isn't authenticated")
     else:
-        error.append("invalid request")
+        messages.error("invalid request")
 
-    context = {
-        'error': error,
-        'back': 'election:home',
-    }
-    return render(request, 'error.html', context=context)
+    return redirect('election:home')
 
 def end_election(request):
     error = []
@@ -139,19 +135,16 @@ def end_election(request):
             if ec.end_time == None:
                 ec.end_time = datetime.now()
                 ec.save()
-                return redirect('election:home')
+                messages.success(request, f"Election has offiaclly Ended. time : {ec.end_time}")
+                return redirect('result')
             else:
-                error.append('end-time already set & election already started')
+                messages.error('end-time already set & election already started')
         else:
-            error.append("user isn't authenticated")
+            messages.error("User isn't authenticated or not an EC")
     else:
-        error.append("invalid request")
+        messages.error("Invalid request")
 
-    context = {
-        'error': error,
-        'back': 'election:home',
-    }
-    return render(request, 'error.html', context=context)
+    return redirect('election:home')
 
 def add_candidate(request):
     user_info = get_user_details(request)
@@ -221,7 +214,7 @@ def search_candidate(request):
     user_info = get_user_details(request)
     form = SearchForm()
     if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
-        messages.error(request, "user not authenticated")
+        messages.error(request, "User not authenticated or not an EC")
         return redirect('index')
 
     if request.method == 'POST':
@@ -242,10 +235,18 @@ def search_candidate(request):
                 messages.error(request, "Candidate Not found")
         else:
             messages.error(request, "Input invalid")
+    candidates = []
+    for c in Candidate.objects.all():
+        candidates.append({
+            'candidate' : c,
+            'form' : SearchForm(initial = {
+                'username' : c.voter.rollno,
+            })
+        })
     context = {
         'user': user_info,
         'form': form,
-        'method' : request.method,
+        'candidates' : candidates,
     }
     return render(request, 'election_coordinator/search-candidate.html', context)
 
@@ -288,9 +289,18 @@ def search_post(request):
                 messages.error(request, "Post Not found")
         else:
             messages.error(request, "Input invalid")
+    
+    posts = []
+    for post in Post.objects.all():
+        posts.append({
+            'post': post,
+            'form': SearchForm(initial = {
+                'username' : post.post_name,
+            })
+        })
     context = {
         'user': user_info,
-        'method': request.method,
+        'posts' : posts,
     }
     return render(request, 'election_coordinator/search-post.html', context)
 

@@ -2,16 +2,6 @@
 
 
 {% block content %}
-{% if method == 'GET'%}
-
-    <form action="" method="post">
-        {% csrf_token %}
-        <label for="post_name">Post name</label>
-        <input type="text" name="post_name" id="post_name">
-
-        <input type="submit" value="Search Post">
-    </form>
-{%endif%}
 
 {% if post %}
 
@@ -31,6 +21,53 @@
             <input class="btn btn-danger" type="submit" value="Delete Post">
         </form>
     </section>
+</div>
+
+{% else %}
+
+<div class="text-center">
+	<form class="form" action="" method="post">
+		{% csrf_token %}
+
+		<div class="input-group mb-3">
+			{{form.username}}
+			<div class="input-group-append">
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div class="container">
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Post</th>
+				<th scope="col">
+					oper.
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for x in posts %}
+			<tr>
+				<th scope="row">{{forloop.counter}}</th>
+				<td>{{x.post.post_name}}</td>
+				<td>
+					<form class="form" action="" method="post">
+						{% csrf_token %}
+
+						{{x.form.username.as_hidden}}
+						<div class="input-group-append">
+							<button class="btn btn-outline-success" type="submit">Search</button>
+						</div>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>
 
 {% endif %}

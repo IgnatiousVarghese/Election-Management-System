@@ -12,10 +12,11 @@ def vote_detail(voter):
     # type: Dict{Post:Candidate}
     posts = Post.objects.all()
     for p in posts:
-        detail[p] = None
-        p_vote = votes.filter(post=p)
-        if p_vote.exists():
-            detail[p] = p_vote[0]
+        try:
+            p_vote = votes.get(post = p)
+            detail[p] = p_vote
+        except:
+            detail[p] = None
 
     return detail
 
@@ -93,6 +94,8 @@ def get_user_details(request):
 
     else:
         USER['is_authenticated'] = False
+
+    # start_time = 
 
     return USER
 

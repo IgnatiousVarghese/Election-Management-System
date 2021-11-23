@@ -27,7 +27,7 @@
 
 
             <div>
-                <canvas id="{{x.post.id}}_chart" width="800" height="800" style="margin: auto;"></canvas>
+                <canvas id="{{x.post.id}}_chart" width="300" height="300" style="margin: auto;"></canvas>
             </div>
 
 
@@ -43,7 +43,11 @@
                     {% for y in x.votes_for_each_candidate %}
                     <tr>
                         <td>
+                            {% if y.candidate %}
                             {{y.candidate.voter.first_name}} {{y.candidate.voter.last_name}}
+                            {% else %}
+                            NOTA
+                            {% endif %}
                         </td>
                         <td>
                             {{y.vote_count}}
@@ -84,21 +88,34 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: 'A random dataset',
+                            label: 'Election Result',
                             data: data,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgb(255, 99, 132)',
-                            pointBackgroundColor: 'rgb(255, 99, 132)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                'rgb(51, 102, 255)',
+                                'rgb(204, 0, 153)',
+                                'rgb(255, 102, 0)',
+                                'rgb(204, 255, 51)',
+                                'rgb(51, 102, 153)',
+                            ],
                         }
                     ]
                 },
                 options: {
-                    responsive: false
-                }
-            };
+                    responsive: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Chart.js Doughnut Chart'
+                        }
+                    }
+                },
+            }
             var ctx = document.getElementById(post_ids[i] + '_chart').getContext('2d');
             window.myLine = new Chart(ctx, config);
         }

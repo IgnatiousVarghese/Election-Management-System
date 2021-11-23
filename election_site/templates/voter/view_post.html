@@ -1,16 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    {{user}}
-</div>
-<div class="container">
-    {{info}}
-</div>
 
 <div class="container">
     {% csrf_token %}
     {% for post, candidates in info.items %}
-    {
+    
     <section class="jumbotron text-center">
         <div class="container">
             <h1 class="jumbotron-heading">
