@@ -79,7 +79,7 @@ def login(request):
 							request.session['voter'] = rollno
 							request.session['is_authenticated'] = True
 							request.session.set_expiry(30000)
-							messages.success(request, "successfully logged in as Voter")				
+											
 							return redirect('election:home')
 						else:
 							messages.error(request, "Password incorrect")
@@ -103,7 +103,7 @@ def login(request):
 							request.session['candidate'] = rollno
 							request.session['is_authenticated'] = True
 							request.session.set_expiry(300)
-							messages.success(request, "successfully logged in as Candidate")
+							
 							return redirect('election:home')
 						else:
 							messages.error(request, "Password incorrect")
@@ -122,7 +122,7 @@ def login(request):
 						request.session['election_cordinator'] = username
 						request.session['is_authenticated'] = True
 						request.session.set_expiry(300)
-						messages.success(request, "successfully logged in as EC")
+						
 						return redirect('election:home')
 					else:
 						messages.error(request, "Password incorrect")
@@ -143,8 +143,7 @@ def login(request):
 
 
 def logout(request):
-	if request.user.is_authenticated:
-		auth_logout(request.user)
+	
 	if request.method == "GET":
 		if request.session.has_key('is_authenticated'):
 			del request.session['is_authenticated']

@@ -68,7 +68,7 @@ def vote(request, idpost, idcandidate):
             else:
                 messages.error(request, "You Have already voted on this post")
         except:
-            return HttpResponse("Some problem with Database\n plz contact admin.")
+            return HttpResponse("Some problem with Database\n Please contact admin.")
 
     return redirect('election:view_post', idpost)
 
@@ -92,6 +92,7 @@ def edit_manifesto(request):
             print(f" ******************{manifesto}*************** ")
             candidate.manifesto = manifesto
             candidate.save()
+            messages.success(request, "Your Manifesto has been updated.")
             return redirect('election:home')
     return redirect('election:home')
 
@@ -119,12 +120,12 @@ def start_election(request):
                 messages.success(request, f"Election have officially began. time : {ec.start_time}")
                 return redirect('election:home')
             else:
-                messages.error(request , "start-time already set & election already started")
+                messages.error(request , "Election has already been started")
                 
         else:
-            messages.error("user isn't authenticated")
+            messages.error("User isn't authenticated")
     else:
-        messages.error("invalid request")
+        messages.error("Invalid request")
 
     return redirect('election:home')
 
@@ -140,9 +141,9 @@ def end_election(request):
                     messages.success(request, f"Election has offiaclly Ended. time : {ec.end_time}")
                     return redirect('result')
                 else:
-                    messages.error('end-time already set & election already started')
+                    messages.error('Election already ended.')
             else:
-                messages.error("Election Not started. Plz start it to end it.")
+                messages.error("Election Not started.\n Please start it to end it.")
         else:
             messages.error("User isn't authenticated or not an EC")
     else:
@@ -169,16 +170,19 @@ def add_candidate(request):
                     new_cand = Candidate(
                         voter=voter, manifesto=manifesto, post_applied=post)
                     new_cand.save()
-                    messages.success(request, "New candidate added!!")
+                    messages.success(request, "New candidate added!")
                     return redirect('election:home')
                 except:
-                    messages.error(request, "rollno or post invalid OR voter already candidate")
+                    messages.error(request, "Rollno or post invalid OR voter already candidate")
                     return redirect('election:home')
-            else:
+            elif Voter.objects.filter(rollno=rollno).exists()==False:
                 messages.error(
-                    request, "this voter is already a candidate")
+                    request, "This is not a valid voter")
+            else :
+                messages.error(
+                    request, "This voter is already a candidate")
         else:
-            messages.error(request, "form not valid")
+            messages.error(request, "Form not valid")
 
     context = {
         'user': user_info,
@@ -201,13 +205,13 @@ def add_post(request):
             try:
                 post = Post(post_name=post_name, desc=desc)
                 post.save()
-                messages.success(request, "New POST added!!")
+                messages.success(request, "New POST added!")
                 return redirect('election:home')
             except:
-                messages.error(request, "post already exists or invalid")
+                messages.error(request, "Post already exists or invalid")
                 return redirect('election:home')
         else:
-            messages.error(request, "form not valid")
+            messages.error(request, "Form not valid")
     context = {
         'user': user_info,
         'form': form
@@ -282,6 +286,7 @@ def search_post(request):
         post_name = request.POST['post_name']
         if post_name:
             try:
+                
                 post = Post.objects.get(post_name=post_name)
                 messages.success(request, "Post Found")
                 context = {

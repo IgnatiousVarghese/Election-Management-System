@@ -54,6 +54,7 @@ def get_user_details(request):
         'is_election_coordinator': False,
         'account_type': None,
         'username': None,
+        'name' : None,
         'election_start_time' : None,
         'election_end_time' : None
     }
