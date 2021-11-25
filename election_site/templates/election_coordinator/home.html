@@ -3,35 +3,98 @@
 
 <div class="container">
     <section class="jumbotron text-center">
-        <div class="container">
+        <div class="container p-4">
             <h1 class="jumbotron-heading">
-                {{ec.username}} 
+                {{ec.username}}
             </h1>
         </div>
-        <p>
-            <form action="start-election/" method="post">
-                {% csrf_token %}
-                <input name="" id="" class="btn btn-success m-2" 
-                type="submit" value="Start election">
-            </form>
-            <form action="end-election/" method="post">
-                {% csrf_token %}
-                <input name="" id="" class="btn btn-danger m-2" 
-                type="submit" value="END election">
-            </form>
-        <a name="" id="" class="btn btn-primary" href="add-post/" role="button">
-            add post
-        </a>
-        <a name="" id="" class="btn btn-primary" href="add-candidate/" role="button">
-            add candidate
-        </a>
-        <a name="" id="" class="btn btn-primary" href="search-post/" role="button">
-            remove post
-        </a>
-        <a name="" id="" class="btn btn-primary" href="search-candidate/" role="button">
-            remove candidate
-        </a>
-        </p>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Start Elction</h5>
+                        <p class="card-text">You start election Here. Time of start will be displayed in navbar.</p>
+
+                        <form action="start-election/" method="post">
+                            {% csrf_token %}
+                            <input name="" id="" class="btn btn-success m-2" type="submit" value="Start election">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">End Election</h5>
+                        <p class="card-text">You can END election Here. After ending result page will be accessable by
+                            public.</p>
+
+                        <form action="end-election/" method="post">
+                            {% csrf_token %}
+                            <input name="" id="" class="btn btn-danger m-2" type="submit" value="END election">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Post</h5>
+                        <p class="card-text">
+                            Add post by giving a post name and small description
+                        </p>
+                        <a href="add-post/" class="btn btn-primary">Add Post</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Candidate</h5>
+                        <p class="card-text">
+                            Add candidates from Voters already present by providing a mapping to one of the posts.
+                        </p>
+                        <a href="add-candidate/" class="btn btn-primary">
+                            Add Candidate
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Remove Post</h5>
+                        <p class="card-text">
+                            Remove post. You can search for posts or select from given list of Posts.
+                        </p>
+                        <a href="search-post/" class="btn btn-primary">
+                            Remove Post
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Remove Candidate</h5>
+                        <p class="card-text">
+                            Remove Candidate. You can search for posts or select from given list of Candidates.
+                        </p>
+                        <a href="search-candidate/" class="btn btn-primary">
+                            Remove Candidate
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
             <h2 class="lead text-muted">
                 total voters = {{vote_stat.total_voters}}

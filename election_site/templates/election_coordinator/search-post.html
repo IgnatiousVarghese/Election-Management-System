@@ -6,21 +6,21 @@
 {% if post %}
 
 <div class="container">
-    <section class="jumbotron text-center">
-        <div class="container">
-            <h1 class="jumbotron-heading">
-                {{post.post_name}}
-            </h1>
-            <p class="lead text-muted">
-                {{post.desc}}
-            </p>
-        </div>
-        <form action="/home/del-post/" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="post_id" value = {{post.id}}>
-            <input class="btn btn-danger" type="submit" value="Delete Post">
-        </form>
-    </section>
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">
+				{{post.post_name}}
+			</h1>
+			<p class="lead text-muted">
+				{{post.desc}}
+			</p>
+		</div>
+		<form action="/home/del-post/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="post_id" value={{post.id}}>
+			<input class="btn btn-danger" type="submit" value="Delete Post">
+		</form>
+	</section>
 </div>
 
 {% else %}
@@ -30,7 +30,8 @@
 		{% csrf_token %}
 
 		<div class="input-group mb-3">
-			{{form.username}}
+			<input name="post_name" class = "form-control"
+			value="" id="post_name" placeholder="Enter Post name here" />
 			<div class="input-group-append">
 				<button class="btn btn-outline-success" type="submit">Search</button>
 			</div>
@@ -57,8 +58,8 @@
 				<td>
 					<form class="form" action="" method="post">
 						{% csrf_token %}
-
-						{{x.form.username.as_hidden}}
+						<input type="hidden" name="post_name" 
+						value="Mental health nurse" id="id_{{x.post.id}}" />
 						<div class="input-group-append">
 							<button class="btn btn-outline-success" type="submit">Search</button>
 						</div>

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout
 from django.contrib import messages
 from django.http import HttpResponse
+from .utils import get_user_details
 from election_site.settings import EMAIL_HOST_USER
 from .models import *
 from .forms import *
@@ -48,6 +49,7 @@ def get_password(request):
 			messages.error(request, "input invalid")
 	else:
 		context['form'] = form
+		context['user'] = get_user_details(request)
 		return render(request, 'account/get_password.html', context)
 	return redirect('login')
 
@@ -134,6 +136,7 @@ def login(request):
 			messages.error(request, "Form input not valid")
 
 	context = {
+		'user' : get_user_details(request),
 		'form': form
 	}
 	return render(request, 'account/login.html', context=context)

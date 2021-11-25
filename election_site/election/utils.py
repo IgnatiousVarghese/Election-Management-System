@@ -1,5 +1,6 @@
 from django.db.models.aggregates import Count
 from .models import *
+from datetime import datetime
 
 # this function returns a python dictionary with
 # each post mapped with the vote of current voter for this particular post
@@ -13,7 +14,7 @@ def vote_detail(voter):
     posts = Post.objects.all()
     for p in posts:
         try:
-            p_vote = votes.get(post = p)
+            p_vote = votes.get(post=p)
             detail[p] = p_vote
         except:
             detail[p] = None
@@ -53,6 +54,8 @@ def get_user_details(request):
         'is_election_coordinator': False,
         'account_type': None,
         'username': None,
+        'election_start_time' : None,
+        'election_end_time' : None
     }
     if request.session.has_key('voter'):
         USER['account_type'] = 'Voter'
@@ -95,7 +98,15 @@ def get_user_details(request):
     else:
         USER['is_authenticated'] = False
 
-    # start_time = 
+    election_time = Election_Coordinator.objects.values(
+        'start_time', 'end_time').first()
+    start_time = election_time['start_time']
+    end_time = election_time['end_time']
+    
+    if start_time:
+        USER['election_start_time'] = start_time.strftime("%m/%d/%Y, %H:%M:%S")
+    if end_time:
+        USER['election_end_time'] = end_time.strftime("%m/%d/%Y, %H:%M:%S")
 
     return USER
 
@@ -116,4 +127,3 @@ def get_vote_stat():
         'total_voters_voted': total_voters_voted,
     }
     return vote_stat
-

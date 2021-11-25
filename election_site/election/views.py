@@ -113,6 +113,8 @@ def start_election(request):
             ec = ec_info['election_cordinator']
             if ec.start_time == None:
                 ec.start_time = datetime.now()
+                x = ec.start_time.strftime("%m/%d/%Y, %H:%M:%S")
+                print(f"*********\n\n\n{x}\n\n\n******")
                 ec.save()
                 messages.success(request, f"Election have officially began. time : {ec.start_time}")
                 return redirect('election:home')
@@ -127,18 +129,20 @@ def start_election(request):
     return redirect('election:home')
 
 def end_election(request):
-    error = []
     if request.method == 'POST':
         ec_info = get_user_details(request)
         if ec_info['is_authenticated'] and ec_info['is_election_coordinator']:
             ec = ec_info['election_cordinator']
-            if ec.end_time == None:
-                ec.end_time = datetime.now()
-                ec.save()
-                messages.success(request, f"Election has offiaclly Ended. time : {ec.end_time}")
-                return redirect('result')
+            if ec.start_time is not None:
+                if ec.end_time == None:
+                    ec.end_time = datetime.now()
+                    ec.save()
+                    messages.success(request, f"Election has offiaclly Ended. time : {ec.end_time}")
+                    return redirect('result')
+                else:
+                    messages.error('end-time already set & election already started')
             else:
-                messages.error('end-time already set & election already started')
+                messages.error("Election Not started. Plz start it to end it.")
         else:
             messages.error("User isn't authenticated or not an EC")
     else:
@@ -301,6 +305,7 @@ def search_post(request):
     context = {
         'user': user_info,
         'posts' : posts,
+        'form' : SearchForm()
     }
     return render(request, 'election_coordinator/search-post.html', context)
 
