@@ -143,7 +143,6 @@ def login(request):
 
 
 def logout(request):
-	
 	if request.method == "GET":
 		if request.session.has_key('is_authenticated'):
 			del request.session['is_authenticated']
