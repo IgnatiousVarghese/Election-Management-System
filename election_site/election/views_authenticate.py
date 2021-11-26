@@ -86,7 +86,7 @@ def login(request):
 					except:
 						messages.error(request, "Voter not found in Database")
 				elif start_time and end_time:
-					messages.success(request, "Election Over. No need to login")
+					messages.success(request, "Election Over.")
 					return redirect('result')
 				else:
 					messages.error(request, "Election NOT started yet")

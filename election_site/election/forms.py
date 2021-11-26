@@ -57,6 +57,6 @@ class AddPost(forms.Form):
 class SearchForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Enter here',
+        'placeholder': 'Enter candidate roll number',
     }))
     
