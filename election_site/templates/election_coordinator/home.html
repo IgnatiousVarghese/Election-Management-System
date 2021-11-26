@@ -12,13 +12,21 @@
             <div class="col-sm-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Start Elction</h5>
+                        <h5 class="card-title">Start Election</h5>
+                        {% if not user.election_start_time %}
                         <p class="card-text">You start election Here. Time of start will be displayed in navbar.</p>
 
                         <form action="start-election/" method="post">
                             {% csrf_token %}
                             <input name="" id="" class="btn btn-success m-2" type="submit" value="Start election">
                         </form>
+                        {% else %}
+                        <p class="card-text">Election Already started.</p>
+                        <div class = "text-muted">
+                            {{user.election_start_time}}
+                        </div>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
