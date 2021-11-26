@@ -72,7 +72,7 @@ def get_vote_count():
             }
             votes_for_each_candidate.append(cand_info)
             post_details['candidate_names'].append(
-                str(candidate.voter.first_name + candidate.voter.last_name)
+                str(candidate.voter.first_name +" " + candidate.voter.last_name)
             )
             post_details['candidate_vote_counts'].append(count)
 
