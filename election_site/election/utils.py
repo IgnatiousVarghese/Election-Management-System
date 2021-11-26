@@ -62,6 +62,7 @@ def get_user_details(request):
         USER['account_type'] = 'Voter'
         rollno = request.session['voter']
         USER['username'] = rollno
+  
         try:
             v = Voter.objects.get(rollno=rollno)
             USER['voter'] = v

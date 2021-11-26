@@ -8,17 +8,15 @@
     {% for x in result %}
     <section class="jumbotron text-center">
         <div class="container">
-            <h1 class="jumbotron-heading">
-                {{x.post.post_name}}
-            </h1>
-            <p class="lead text-muted">
-                {{x.post.id}}
-            </p>
+            <h2 class="jumbotron-heading">
+                Post : {{x.post.post_name}}
+            </h2>
+            
         </div>
         <div class="container">
             {% if x.winning_candidate %}
 
-            <h2 class="lead text-muted">
+            <h2 >
                 Winnning Candidate : {{x.winning_candidate.0}}
             </h2>
             <h2 class="lead text-muted">
@@ -63,7 +61,7 @@
             </h2>
             {% endif %}
         </div>
-    </section>
+    </section><br><br>
     {% endfor %}
 </div>
 
