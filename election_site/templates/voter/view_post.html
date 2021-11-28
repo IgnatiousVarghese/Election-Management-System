@@ -8,7 +8,7 @@
 <div class="container">
     {% csrf_token %}
     {% for post, candidates in info.items %}
-    
+
     <div class="jumbotron text-center details">
         <div class="container">
             <h1 class="jumbotron-heading p-2">
@@ -18,11 +18,10 @@
                 {{post.desc}}
             </p>
         </div>
+        {% if candidates %}
         <div class="album py-5 bg-light">
             <div class="container">
-
                 <div class="row">
-
                     {% for candidate in candidates %}
 
                     <div class="col-md-4">
@@ -43,7 +42,8 @@
                                             VOTED
                                         </button>
                                         {% else %}
-                                        <button type="submit" class="btn btn-sm btn-primary" onclick="confirm('Plz Confirm')">
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            onclick="return myFunction('Plz Confirm\nyou have selected{{candidate.0.voter.first_name}} {{candidate.0.voter.last_name}}')">
                                             vote
                                         </button>
                                         {% endif %}
@@ -84,9 +84,25 @@
 
             </table>
         </div>
+        {% else %}
+        <div>            
+            <img src="{% static 'img/voted.jpg' %}" alt="ALREADY VOTED">
+        </div>
+        <br>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
+
+<script>
+    function myFunction(x) {
+        if (confirm(x)) {
+           return true;
+        } else {
+          return false;
+        }
+    }
+</script>
 
 
 {% endblock %}
