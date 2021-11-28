@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home_style.css' %}">
+{% endblock %}
 {% block content %}
 
 <div class="container">
     {% csrf_token %}
     {% for post, candidates in info.items %}
     
-    <section class="jumbotron text-center">
+    <div class="jumbotron text-center details">
         <div class="container">
-            <h1 class="jumbotron-heading">
+            <h1 class="jumbotron-heading p-2">
                 {{post.post_name}}
             </h1>
             <p class="lead text-muted">
@@ -22,7 +26,7 @@
                     {% for candidate in candidates %}
 
                     <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
+                        <div class="card mb-4 shadow-sm card-body">
                             <h4 class="card-title">
                                 {{candidate.0.voter.first_name}}
                                 {{candidate.0.voter.last_name}}
@@ -80,7 +84,7 @@
 
             </table>
         </div>
-    </section>
+    </div>
     {% endfor %}
 </div>
 

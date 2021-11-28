@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+{% endblock style %}
+
+
 {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="home-content">
+                <div class="vote">
+                    <h1>Vote - Get Started!</h1>
+                    <h3>Your Voice Matters!</h3>
+                    <a class="btn btn-primary btn-lg" href="{% url 'election:home' %}" role="button">
+                        Get Started !
 
-<div >
-    <div class="main">
-        <div class="col-6">
-            <h1 class="display-5 fw-bold">
-                <a href="/login" type="button" class="btn btn-primary btn-lg px-4 gap-3">
-                    Vote
-
-                </a>
-            </h1>
+                    </a>
+                </div>
+            </div>
         </div>
-        
     </div>
-
-   
 </div>
-
-
-{% endblock %}
+{% endblock content %}
