@@ -38,6 +38,8 @@ def my_votes_info(voter):
         for c in candidates:
             if votes.filter(candidate=c).exists():
                 detail[p].append((c, True))
+                detail[p] = None
+                break
             else:
                 detail[p].append((c, False))
 

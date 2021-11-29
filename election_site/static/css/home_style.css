@@ -1,0 +1,14 @@
+.details{
+    margin: 40px 0px;
+    background-color: rgba(237, 238, 238, 0.5);
+    border-radius: 20px;
+}
+
+.card-body{
+    padding : 20px 5px;
+}
+
+img {
+    max-width: 25%;
+    max-height: 25%;
+}

@@ -1,0 +1,47 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+body {
+    min-height: 75rem;
+    padding-top: 4.5rem;
+}
+
+.form {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    margin: auto;
+    align-content: center;
+}
+
+.form input[type="text"] {
+    max-width: 300px;
+    margin-bottom: 10px;
+    align-content: center;
+}
+
+.form input[type="email"] {
+    max-width: 500px;
+    margin-bottom: 10px;
+}
+
+.form select {
+    max-width: 500px;
+    margin-bottom: 10px;
+}
+
+.form textarea {
+    max-width: 500px;
+    margin-bottom: 10px;
+}
