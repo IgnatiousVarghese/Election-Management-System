@@ -1,3 +1,5 @@
+#This file contains classes for getting inputs everywhere throughout the application.
+
 from django import forms
 from .models import *
 

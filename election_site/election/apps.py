@@ -1,3 +1,5 @@
+# Name of the application
+
 from django.apps import AppConfig
 
 
