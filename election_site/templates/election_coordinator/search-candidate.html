@@ -10,13 +10,16 @@
 	<section class="jumbotron text-center">
 		<div class="container">
 			<h1 class="jumbotron-heading">
-				Name : {{candidate.voter.first_name}} {{candidate.voter.last_name}}
+				{{candidate.voter.first_name}} {{candidate.voter.last_name}}
 			</h1>
 			<p class="lead text-muted">
 				Roll No: {{candidate.voter.rollno}}
 			</p>
 			<p class="lead text-muted">
 				Post : {{candidate.post_applied.post_name}}
+			</p>
+			<p class="lead text-muted">
+				Date added : {{mang_cand.time}}
 			</p>
 
 		</div>

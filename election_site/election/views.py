@@ -178,6 +178,11 @@ def add_candidate(request):
                     new_cand = Candidate(
                         voter=voter, manifesto=manifesto, post_applied=post)
                     new_cand.save()
+                    m_cand = Manage_Candidate(
+                        candidate=new_cand,
+                        ec = ec,
+                    )
+                    m_cand.save()
                     messages.success(request, "New candidate added!")
                     return redirect('election:home')
                 except:
@@ -213,6 +218,11 @@ def add_post(request):
             try:
                 post = Post(post_name=post_name, desc=desc)
                 post.save()
+                mang_post = Manage_Post(
+                    post = post, 
+                    ec = ec,
+                )
+                mang_post.save()
                 messages.success(request, "New POST added!")
                 return redirect('election:home')
             except:
@@ -239,12 +249,13 @@ def search_candidate(request):
             rollno = form.cleaned_data['username']
             try:
                 candidate = Candidate.objects.get(voter__rollno=rollno)
+                mang_cand = Manage_Candidate.objects.get(candidate=candidate)
                 messages.success(request, "Candidate Found")
                 context = {
                     'user': user_info,
                     'form': form,
                     'candidate': candidate,
-                    
+                    'mang_cand': mang_cand,
                 }
                 return render(request, 'election_coordinator/search-candidate.html', context)
             except:
@@ -296,10 +307,12 @@ def search_post(request):
             try:
                 
                 post = Post.objects.get(post_name=post_name)
+                mang_post = Manage_Post.objects.get(post =post)
                 messages.success(request, "Post Found")
                 context = {
                     'user': user_info,
-                    'post': post
+                    'post': post,
+                    'mang_post': mang_post
                 }
                 return render(request, 'election_coordinator/search-post.html', context)
             except:

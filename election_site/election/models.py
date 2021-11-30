@@ -15,6 +15,8 @@ class Voter(models.Model):
     last_name = models.CharField(max_length=30)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=30)
+    dob = models.DateTimeField(null = True, default=None)
+    dept = models.CharField(null = True,max_length=30)
 
     def __str__(self):
         return self.first_name
@@ -47,3 +49,17 @@ class Vote(models.Model):
 
     def __str__(self):
         return f"voter : {self.voter}\nPost : {self.post}\ncandidate : {self.candidate}"
+
+
+class Manage_Candidate(models.Model):
+    manage_candidate_id = models.AutoField(primary_key=True)
+    candidate = models.ForeignKey(Candidate, on_delete =models.CASCADE, default=None)
+    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE, default=None)
+    time = models.DateTimeField(auto_now_add=True)
+
+
+class Manage_Post(models.Model):
+    manage_post_id = models.AutoField(primary_key=True)
+    post = models.ForeignKey(Post, on_delete =models.CASCADE, default=None)
+    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE, default=None)
+    time = models.DateTimeField(auto_now_add=True)

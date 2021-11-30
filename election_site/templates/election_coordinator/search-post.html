@@ -14,6 +14,9 @@
 			<p class="lead text-muted">
 				{{post.desc}}
 			</p>
+			<p class="lead text-muted">
+				Date added : {{mang_post.time}}
+			</p>
 		</div>
 		<form action="/home/del-post/" method="post">
 			{% csrf_token %}
@@ -61,7 +64,7 @@
 						<input type="hidden" name="post_name" 
 						value="{{x.post.post_name}}" id="id_{{x.post.id}}" />
 						<div class="input-group-append">
-							<button class="btn btn-outline-success" type="submit">Remove</button>
+							<button class="btn btn-outline-success" type="submit">Details</button>
 						</div>
 					</form>
 				</td>

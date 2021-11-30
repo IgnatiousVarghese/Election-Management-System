@@ -22,7 +22,9 @@ def seed_voter(num_entries=50, overwrite=False):
             first_name=first_name,
             last_name=last_name,
             email=first_name + "." + last_name + "@fakermail.com",
-            password="1234"
+            password="1234",
+            dept=random.choices(['CSE', 'ECE', 'EEE'])[0],
+            dob=datetime.datetime.now() - datetime.timedelta(days=10000),
         )
         v.save()
         count += 1
@@ -35,6 +37,7 @@ def seed_voter(num_entries=50, overwrite=False):
         )
     print()
 
+
 def seed_posts_and_candidates(num_entries=3, overwrite=False):
     """
     Creates num_entries worth a new voters
@@ -44,31 +47,44 @@ def seed_posts_and_candidates(num_entries=3, overwrite=False):
         Post.objects.all().delete()
     count = 0
     c_count = 0
+    ec = Election_Coordinator.objects.all().first()
     # c_count -> count of new candidates created
     for i in range(num_entries):
         post_name = fake.job()
         p = Post(
-            post_name=post_name, 
-            desc = fake.paragraph(2),
+            post_name=post_name,
+            desc=fake.paragraph(2),
         )
         p.save()
-        x = random.randint(2,4)
+        mang_post = Manage_Post(
+            post=p,
+            ec=ec,
+        )
+        mang_post.save()
+        x = random.randint(2, 4)
         for j in range(x):
             v = Voter(
-                rollno = f"C{c_count}",
-                first_name = fake.first_name(),
-                last_name = fake.last_name(),
-                email= f"c{c_count}" + "@fakermail.com",
-                password="1234"                
+                rollno=f"C{c_count}",
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                email=f"c{c_count}" + "@fakermail.com",
+                password="1234",
+                dept=random.choices(['CSE', 'ECE', 'EEE'])[0],
+                dob=datetime.datetime.now() - datetime.timedelta(days=10000),
             )
             v.save()
             c_count += 1
             c = Candidate(
-                voter = v,
-                manifesto = fake.paragraph(7),
-                post_applied = p,
+                voter=v,
+                manifesto=fake.paragraph(7),
+                post_applied=p,
             )
             c.save()
+            mang_cand = Manage_Candidate(
+                candidate=c,
+                ec=ec,
+            )
+            mang_cand.save()
 
         count += 1
         percent_complete = count / num_entries * 100
@@ -79,6 +95,7 @@ def seed_posts_and_candidates(num_entries=3, overwrite=False):
             flush=True
         )
     print()
+
 
 def seed_votes():
     Vote.objects.all().delete()
@@ -92,12 +109,12 @@ def seed_votes():
             if i:
                 c = candidates[i-1]
                 vote = Vote(
-                    voter = v,
-                    candidate = c,
-                    post = post,
+                    voter=v,
+                    candidate=c,
+                    post=post,
                 )
                 vote.save()
             else:
                 print(f"{v.rollno} not voting in {post.post_name}")
-                nota+=1
+                nota += 1
         print(f"nota for {post.post_name} is {nota}")
