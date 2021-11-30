@@ -54,8 +54,8 @@ def get_vote_count():
             VOTE_COUNT.append(post_details)
             continue
 
-        total_votes = Vote.objects.filter(post=post).count()
-        vote_count = Vote.objects.filter(post=post).values(
+        total_votes = Vote.objects.filter(candidate__post_applied=post).count()
+        vote_count = Vote.objects.filter(candidate__post_applied=post).values(
             'candidate').annotate(
                 no_of_votes=Count('candidate')).order_by('-no_of_votes')
 
@@ -64,14 +64,14 @@ def get_vote_count():
             post_details['reason'] = "No one voted"
         else:
             post_details['winning_candidate'] = [
-                Candidate.objects.get(id=vote_count.first()['candidate']),
+                Candidate.objects.get(voter=vote_count.first()['candidate']),
                 vote_count.first()['no_of_votes'],
             ]
 
         votes_for_each_candidate = []
         for x in vote_count:
             candidate_id, count = x['candidate'], x['no_of_votes']
-            candidate = Candidate.objects.get(id=candidate_id)
+            candidate = Candidate.objects.get(pk=candidate_id)
             cand_info = {
                 'candidate': candidate,
                 'vote_count': count

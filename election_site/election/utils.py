@@ -16,7 +16,7 @@ def vote_detail(voter):
     posts = Post.objects.all()
     for p in posts:
         try:
-            p_vote = votes.get(post=p)
+            p_vote = votes.get(candidate__post_applied=p)
             detail[p] = p_vote
         except:
             detail[p] = None

@@ -61,11 +61,10 @@ def vote(request, idpost, idcandidate):
             candidate = Candidate.objects.get(voter_id=idcandidate)
             post = Post.objects.get(pk=idpost)
             already_voted = Vote.objects.filter(
-                voter=voter['voter']).filter(post=post
-                                             )
+                voter=voter['voter']).filter(candidate__post_applied=post)
             if not already_voted.exists():
                 voter_vote = Vote(voter=voter['voter'],
-                                  candidate=candidate, post=post)
+                                  candidate=candidate)
                 print(voter_vote)
                 voter_vote.save()
             else:

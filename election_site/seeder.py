@@ -24,7 +24,6 @@ def seed_voter(num_entries=50, overwrite=False):
             email=first_name + "." + last_name + "@fakermail.com",
             password="1234",
             dept=random.choices(['CSE', 'ECE', 'EEE'])[0],
-            dob=datetime.datetime.now() - datetime.timedelta(days=10000),
         )
         v.save()
         count += 1
@@ -70,7 +69,6 @@ def seed_posts_and_candidates(num_entries=3, overwrite=False):
                 email=f"c{c_count}" + "@fakermail.com",
                 password="1234",
                 dept=random.choices(['CSE', 'ECE', 'EEE'])[0],
-                dob=datetime.datetime.now() - datetime.timedelta(days=10000),
             )
             v.save()
             c_count += 1
@@ -111,7 +109,6 @@ def seed_votes():
                 vote = Vote(
                     voter=v,
                     candidate=c,
-                    post=post,
                 )
                 vote.save()
             else:

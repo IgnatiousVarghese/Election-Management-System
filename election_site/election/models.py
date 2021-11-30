@@ -26,7 +26,7 @@ class Voter(models.Model):
 
 
 class Candidate(models.Model):
-    voter = models.OneToOneField(Voter, on_delete=models.CASCADE)
+    voter = models.OneToOneField(Voter, on_delete=models.CASCADE, primary_key=True)
     manifesto = models.TextField()
     post_applied = models.ForeignKey(Post, on_delete=models.CASCADE)
 
@@ -44,25 +44,21 @@ class Election_Coordinator(models.Model):
 
 class Vote(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
-    class Meta:
-        unique_together = (('voter', 'post'), )
-
     def __str__(self):
-        return f"voter : {self.voter}\nPost : {self.post}\ncandidate : {self.candidate}"
+        return f"voter : {self.voter}\nPost : {self.candidate.post_applied}\ncandidate : {self.candidate}"
 
 
 class Manage_Candidate(models.Model):
     manage_candidate_id = models.AutoField(primary_key=True)
-    candidate = models.ForeignKey(Candidate, on_delete =models.CASCADE, default=None)
-    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE, default=None)
+    candidate = models.ForeignKey(Candidate, on_delete =models.CASCADE)
+    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
 
 
 class Manage_Post(models.Model):
     manage_post_id = models.AutoField(primary_key=True)
-    post = models.ForeignKey(Post, on_delete =models.CASCADE, default=None)
-    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE, default=None)
+    post = models.ForeignKey(Post, on_delete =models.CASCADE)
+    ec = models.ForeignKey(Election_Coordinator, on_delete =models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
