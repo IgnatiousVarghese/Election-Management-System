@@ -118,26 +118,30 @@ def start_election(request):
             if ec.start_time == None:
 
                 posts = Post.objects.all()
+                if not posts.exists():
+                    messages.error(request, f"No post Exists")
+                    return redirect('election:home')
                 for post in posts:
-                    if Candidate.objects.filter(post_applied = post).count() <2:
+                    if Candidate.objects.filter(post_applied=post).count() < 2:
                         messages.error(request, f"Less than two candidates in {post.post_name}")
                         return redirect('election:home')
 
                 ec.start_time = datetime.now()
                 x = ec.start_time.strftime("%m/%d/%Y, %H:%M:%S")
-                print(f"*********\n\n\n{x}\n\n\n******")
                 ec.save()
-                messages.success(request, f"Election have officially began. time : {ec.start_time}")
+                messages.success(
+                    request, f"Election have officially began. time : {ec.start_time}")
                 return redirect('election:home')
             else:
-                messages.error(request , "Election has already been started")
-                
+                messages.error(request, "Election has already been started")
+
         else:
             messages.error("User isn't authenticated")
     else:
         messages.error("Invalid request")
 
     return redirect('election:home')
+
 
 def end_election(request):
     if request.method == 'POST':
@@ -149,18 +153,21 @@ def end_election(request):
                     ec.end_time = datetime.now()
                     end_time = ec.end_time.strftime("%m/%d/%Y, %H:%M:%S")
                     ec.save()
-                    messages.success(request, f"Election has offiaclly Ended. time : {end_time}")
+                    messages.success(
+                        request, f"Election has offiaclly Ended. time : {end_time}")
                     return redirect('result')
                 else:
                     messages.error('Election already ended.')
             else:
-                messages.error("Election Not started.\n Please start it to end it.")
+                messages.error(
+                    "Election Not started.\n Please start it to end it.")
         else:
             messages.error("User isn't authenticated or not an EC")
     else:
         messages.error("Invalid request")
 
     return redirect('election:home')
+
 
 def add_candidate(request):
     user_info = get_user_details(request)
@@ -183,18 +190,19 @@ def add_candidate(request):
                     new_cand.save()
                     m_cand = Manage_Candidate(
                         candidate=new_cand,
-                        ec = ec,
+                        ec=ec,
                     )
                     m_cand.save()
                     messages.success(request, "New candidate added!")
                     return redirect('election:home')
                 except:
-                    messages.error(request, "Rollno or post invalid OR voter already candidate")
+                    messages.error(
+                        request, "Rollno or post invalid OR voter already candidate")
                     return redirect('election:home')
-            elif Voter.objects.filter(rollno=rollno).exists()==False:
+            elif Voter.objects.filter(rollno=rollno).exists() == False:
                 messages.error(
                     request, "This is not a valid voter")
-            else :
+            else:
                 messages.error(
                     request, "This voter is already a candidate")
         else:
@@ -205,6 +213,7 @@ def add_candidate(request):
         'form': form
     }
     return render(request, 'election_coordinator/add-candidate.html', context=context)
+
 
 def add_post(request):
     user_info = get_user_details(request)
@@ -222,8 +231,8 @@ def add_post(request):
                 post = Post(post_name=post_name, desc=desc)
                 post.save()
                 mang_post = Manage_Post(
-                    post = post, 
-                    ec = ec,
+                    post=post,
+                    ec=ec,
                 )
                 mang_post.save()
                 messages.success(request, "New POST added!")
@@ -238,6 +247,7 @@ def add_post(request):
         'form': form
     }
     return render(request, 'election_coordinator/add-post.html', context)
+
 
 def search_candidate(request):
     user_info = get_user_details(request)
@@ -268,21 +278,22 @@ def search_candidate(request):
     candidates = []
     for c in Candidate.objects.all():
         candidates.append({
-            'candidate' : c,
-            'form' : SearchForm(initial = {
-                'username' : c.voter.rollno,
+            'candidate': c,
+            'form': SearchForm(initial={
+                'username': c.voter.rollno,
             })
         })
     context = {
         'user': user_info,
         'form': form,
-        'candidates' : candidates,
+        'candidates': candidates,
     }
     return render(request, 'election_coordinator/search-candidate.html', context)
 
+
 def del_candidate(request):
     user_info = get_user_details(request)
-    
+
     if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
         messages.error(request, "user not authenticated")
         return redirect('index')
@@ -298,6 +309,7 @@ def del_candidate(request):
 
     return redirect('election:home')
 
+
 def search_post(request):
     user_info = get_user_details(request)
     if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
@@ -308,9 +320,9 @@ def search_post(request):
         post_name = request.POST['post_name']
         if post_name:
             try:
-                
+
                 post = Post.objects.get(post_name=post_name)
-                mang_post = Manage_Post.objects.get(post =post)
+                mang_post = Manage_Post.objects.get(post=post)
                 messages.success(request, "Post Found")
                 context = {
                     'user': user_info,
@@ -322,25 +334,26 @@ def search_post(request):
                 messages.error(request, "Post Not found")
         else:
             messages.error(request, "Input invalid")
-    
+
     posts = []
     for post in Post.objects.all():
         posts.append({
             'post': post,
-            'form': SearchForm(initial = {
-                'username' : post.post_name,
+            'form': SearchForm(initial={
+                'username': post.post_name,
             })
         })
     context = {
         'user': user_info,
-        'posts' : posts,
-        'form' : SearchForm()
+        'posts': posts,
+        'form': SearchForm()
     }
     return render(request, 'election_coordinator/search-post.html', context)
 
+
 def del_post(request):
     user_info = get_user_details(request)
-    
+
     if not user_info['is_authenticated'] or not user_info['is_election_coordinator']:
         messages.error(request, "user not authenticated")
         return redirect('index')
@@ -348,7 +361,7 @@ def del_post(request):
     if request.method == 'POST':
         post_id = request.POST['post_id']
         try:
-            post = Post.objects.get(id = post_id)
+            post = Post.objects.get(id=post_id)
             post.delete()
             messages.success(request, "Post successfully deleted")
         except:
