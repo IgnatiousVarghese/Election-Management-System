@@ -113,6 +113,13 @@ def start_election(request):
         if ec_info['is_authenticated'] and ec_info['is_election_coordinator']:
             ec = ec_info['election_cordinator']
             if ec.start_time == None:
+
+                posts = Post.objects.all()
+                for post in posts:
+                    if Candidate.objects.filter(post_applied = post).count() <2:
+                        messages.error(request, f"Less than two candidates in {post.post_name}")
+                        return redirect('election:home')
+
                 ec.start_time = datetime.now()
                 x = ec.start_time.strftime("%m/%d/%Y, %H:%M:%S")
                 print(f"*********\n\n\n{x}\n\n\n******")
@@ -137,8 +144,9 @@ def end_election(request):
             if ec.start_time is not None:
                 if ec.end_time == None:
                     ec.end_time = datetime.now()
+                    end_time = ec.end_time.strftime("%m/%d/%Y, %H:%M:%S")
                     ec.save()
-                    messages.success(request, f"Election has offiaclly Ended. time : {ec.end_time}")
+                    messages.success(request, f"Election has offiaclly Ended. time : {end_time}")
                     return redirect('result')
                 else:
                     messages.error('Election already ended.')

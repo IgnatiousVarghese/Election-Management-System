@@ -32,6 +32,9 @@
                     {% if user.is_authenticated %}
                     <a class="nav-item nav-link active" href="#">
                         Welcome {{user.voter.first_name}}!
+                        {% if user.is_election_coordinator %}
+                        EC
+                        {% endif %}
                     </a>
                     <a class="nav-item nav-link" href="/logout">
                         LogOut

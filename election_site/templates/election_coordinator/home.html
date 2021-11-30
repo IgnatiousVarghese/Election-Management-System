@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-
+            {% if user.election_start_time %}
             <div class="col-sm-6">
                 <div class="card">
                     <div class="card-body">
@@ -45,9 +45,11 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
 
         <div class="row">
+            {% if not user.election_start_time %}
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-body">
@@ -87,6 +89,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             
             <div class="col-sm-3">
                 <div class="card">

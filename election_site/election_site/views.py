@@ -57,10 +57,14 @@ def get_vote_count():
             'candidate').annotate(
                 no_of_votes=Count('candidate')).order_by('-no_of_votes')
 
-        post_details['winning_candidate'] = [
-            Candidate.objects.get(id=vote_count.first()['candidate']),
-            vote_count.first()['no_of_votes'],
-        ]
+        if len(vote_count) == 0:
+            post_details['winning_candidate'] = None
+            post_details['reason'] = "No one voted"
+        else:
+            post_details['winning_candidate'] = [
+                Candidate.objects.get(id=vote_count.first()['candidate']),
+                vote_count.first()['no_of_votes'],
+            ]
 
         votes_for_each_candidate = []
         for x in vote_count:
@@ -95,8 +99,8 @@ def get_vote_count():
 def result(request):
     election_time = Election_Coordinator.objects.values(
         'start_time', 'end_time').first()
-    start_time = election_time['start_time']
-    end_time = election_time['end_time']
+    start_time = election_time['start_time'].strftime("%m/%d/%Y, %H:%M:%S")
+    end_time = election_time['end_time'].strftime("%m/%d/%Y, %H:%M:%S")
 
     if start_time and end_time:
         result = get_vote_count()

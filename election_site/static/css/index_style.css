@@ -3,7 +3,7 @@
     text-align: center;
     padding-top: 30%;
     padding-bottom: 30%;
-    background-image: url('../img/vote5.jpg');
+    background-image: url('../img/vote5_1.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -11,6 +11,6 @@
     padding : 10px;
     margin : 0 20% 0 20%;
     color: rgb(63, 72, 124);
-    background-color: rgba(255, 255, 255, 0.4); /* Black w/opacity/see-through */
+    background-color: rgba(255, 255, 255, 0.8); /* Black w/opacity/see-through */
     border-radius: 20px;
 }
