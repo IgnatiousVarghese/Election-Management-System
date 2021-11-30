@@ -1,3 +1,5 @@
+# This file contains functions for login, logout and to get password.
+
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout

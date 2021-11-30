@@ -1,3 +1,5 @@
+# This file contains functions for result and vote details.
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from election.utils import get_user_details

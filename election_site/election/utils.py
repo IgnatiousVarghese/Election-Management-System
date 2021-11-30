@@ -1,3 +1,5 @@
+# This file contains functions to get details about users and votes.
+
 from django.db.models.aggregates import Count
 from .models import *
 from datetime import datetime

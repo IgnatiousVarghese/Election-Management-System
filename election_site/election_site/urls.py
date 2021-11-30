@@ -1,3 +1,4 @@
+# This file is for linking the urls with their corresponding functions in views file.
 
 from django.contrib import admin
 from django.urls import path, include   

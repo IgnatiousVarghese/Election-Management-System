@@ -1,3 +1,5 @@
+# This file is for linking the urls with their corresponding functions in views file.
+
 from django.urls import path
 from . import views
 

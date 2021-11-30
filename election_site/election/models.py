@@ -1,3 +1,6 @@
+# This file contains all classes used to create tables in the database, attributes being the
+# variables in each class.
+
 from django.db import models
 
 

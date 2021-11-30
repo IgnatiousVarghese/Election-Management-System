@@ -1,3 +1,6 @@
+# This file contains alll the main function required for the functionality of the application. It includes functions
+# for home page of each user, adding or removing candidates or posts and functions for starting and ending election.
+
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from .utils import get_user_details, get_vote_stat
