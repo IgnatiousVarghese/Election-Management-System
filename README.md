@@ -35,6 +35,7 @@ The above mentioned commands will create a database with table for
 <code>Election_Coordinator</code>
 The superuser created is NOT the Election Coordinator. EC has to be created by superuser in <code>Election_Coordinator</code> table
 </p><br>
+To create super user enter the following command:-<br>
 <code>python manage.py createsuperuser</code>
 
 <h2>To Create some dummy text data for your app follow the step below:</h2>
