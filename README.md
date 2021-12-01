@@ -8,7 +8,7 @@ Django Election-Management-System App is a full featured voting app. You have to
 <h2>Prerequisites</h2>
 <code>python== 3.5 or up and django==2.0 or up</code>
 
-Following are the commands to install Django in a virtual environment if its already not installed:-
+Following are the commands to install Django in a virtual environment if its already not installed:-<br>
 <code>sudo apt install python3-venv</code><br>
 <code>python3 -m venv dbms_project</code><br>
 <code>source dbms_project/bin/activate</code><br>
@@ -39,12 +39,12 @@ To create super user enter the following command:-<br>
 <code>python manage.py createsuperuser</code>
 
 <h2>To Create some dummy text data for your app follow the step below:</h2>
-<code>pip install faker</code>
-<code>python manage.py shell</code>
-<code>import seeder</code>
-<code>seeder.seed_voter()</code>
-<code>seeder.seed_posts_and_candidates()</code>
-<code>seeder.seed_votes()</code>
+<code>pip install faker</code><br>
+<code>python manage.py shell</code><br>
+<code>import seeder</code><br>
+<code>seeder.seed_voter()</code><br>
+<code>seeder.seed_posts_and_candidates()</code><br>
+<code>seeder.seed_votes()</code><br>
 
 
 <h2> To run the program in local server use the following command </h2>
