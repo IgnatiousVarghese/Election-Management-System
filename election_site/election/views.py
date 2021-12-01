@@ -156,14 +156,14 @@ def end_election(request):
                         request, f"Election has offiaclly Ended. time : {end_time}")
                     return redirect('result')
                 else:
-                    messages.error('Election already ended.')
+                    messages.error(request, 'Election already ended.')
             else:
-                messages.error(
+                messages.error(request, 
                     "Election Not started.\n Please start it to end it.")
         else:
-            messages.error("User isn't authenticated or not an EC")
+            messages.error(request, "User isn't authenticated or not an EC")
     else:
-        messages.error("Invalid request")
+        messages.error(request, "Invalid request")
 
     return redirect('election:home')
 
