@@ -9,9 +9,9 @@ Django Election-Management-System App is a full featured voting app. You have to
 <code>python== 3.5 or up and django==2.0 or up</code>
 
 Following are the commands to install Django in a virtual environment if its already not installed:-
-sudo apt install python3-venv
-python3 -m venv dbms_project
-source dbms_project/bin/activate
+<code>sudo apt install python3-venv</code><br>
+<code>python3 -m venv dbms_project</code><br>
+<code>source dbms_project/bin/activate</code><br>
 
 <h2>Installing</h2>
 <pre>open terminal and type</pre>
@@ -22,6 +22,7 @@ source dbms_project/bin/activate
 
 <h2>To migrate the database open terminal in project directory and type</h2>
 <code>cd election_site</code><br>
+<code>python manage.py makemigrations</code><br>
 <code>python manage.py migrate</code>
 
 <h2>To create Election Coordinator </h2>
