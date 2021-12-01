@@ -12,7 +12,7 @@ from datetime import datetime
 def home(request):
     USER = get_user_details(request)
     if USER['is_authenticated'] == False:
-        return redirect('/')
+        return redirect('/login')
 
     elif(USER['account_type'] == 'Voter'):
         return voter_home(request, USER)
