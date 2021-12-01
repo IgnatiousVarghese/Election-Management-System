@@ -155,6 +155,6 @@ def logout(request):
 		if request.session.has_key('election_cordinator'):
 			del request.session['election_cordinator']
 		
-	return redirect('index')
+	return redirect('/login')
 
 
