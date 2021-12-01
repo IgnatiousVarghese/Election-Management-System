@@ -21,7 +21,7 @@ Following are the commands to install Django in a virtual environment if its alr
 <code>https://github.com/IgnatiousVarghese/Election-Management-System.git</code><br>
 
 <h2>To migrate the database open terminal in project directory and type</h2>
-<code>cd election_site</code><br>
+<br><code>cd election_site</code><br>
 <code>python manage.py makemigrations</code><br>
 <code>python manage.py migrate</code>
 
