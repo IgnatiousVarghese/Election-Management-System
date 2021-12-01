@@ -6,7 +6,7 @@ from django.contrib import messages
 from .utils import get_user_details, get_vote_stat
 from .models import *
 from .forms import AddCandidateForm, AddPost, SearchForm
-from datetime import datetime
+from datetime import datetime,timedelta
 
 
 def home(request):
@@ -125,7 +125,8 @@ def start_election(request):
                         messages.error(request, f"Less than two candidates in {post.post_name}")
                         return redirect('election:home')
 
-                ec.start_time = datetime.now()
+                time_change = timedelta(hours=5) + timedelta(minutes=30)
+                ec.start_time = datetime.now() + time_change
                 x = ec.start_time.strftime("%m/%d/%Y, %H:%M:%S")
                 ec.save()
                 messages.success(
@@ -148,8 +149,9 @@ def end_election(request):
         if ec_info['is_authenticated'] and ec_info['is_election_coordinator']:
             ec = ec_info['election_cordinator']
             if ec.start_time is not None:
-                if ec.end_time == None:
-                    ec.end_time = datetime.now()
+                if ec.end_time == None:                    
+                    time_change = timedelta(hours=5) + timedelta(minutes=30)
+                    ec.end_time = datetime.now() + time_change
                     end_time = ec.end_time.strftime("%m/%d/%Y, %H:%M:%S")
                     ec.save()
                     messages.success(
