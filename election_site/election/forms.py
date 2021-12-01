@@ -6,7 +6,7 @@ from .models import *
 LOGIN_TYPE = [
     ('1', 'Voter'),
     ('2', 'Candidate'),
-    ('3', 'Election Cordinator')
+    ('3', 'Election Coordinator')
 ]
 
 class LoginForm(forms.Form):

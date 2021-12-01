@@ -35,6 +35,9 @@
                         {% if user.is_election_coordinator %}
                         EC
                         {% endif %}
+                        {% if user.is_candidate %}
+                        {{user.candidate.voter.first_name}}
+                        {% endif %}
                     </a>
                     <a class="nav-item nav-link" href="/logout">
                         LogOut
