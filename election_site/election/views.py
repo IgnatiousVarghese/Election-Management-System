@@ -67,6 +67,7 @@ def vote(request, idpost, idcandidate):
                                   candidate=candidate)
                 print(voter_vote)
                 voter_vote.save()
+                messages.success(request, f"You Have voted for {candidate.voter.rollno} in post {post.post_name}")
             else:
                 messages.error(request, "You Have already voted on this post")
         except:
@@ -130,7 +131,7 @@ def start_election(request):
                 x = ec.start_time.strftime("%m/%d/%Y, %H:%M:%S")
                 ec.save()
                 messages.success(
-                    request, f"Election have officially began. time : {ec.start_time}")
+                    request, f"Election have officially began. time : {x}")
                 return redirect('election:home')
             else:
                 messages.error(request, "Election has already been started")

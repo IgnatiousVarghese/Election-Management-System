@@ -47,6 +47,7 @@ def get_vote_count():
         post_details['post'] = post
         post_details['candidate_names'] = []
         post_details['candidate_vote_counts'] = []
+        post_details['is_draw'] = False
 
         if not Candidate.objects.filter(post_applied=post).exists():
             post_details['winning_candidate'] = None
@@ -62,6 +63,11 @@ def get_vote_count():
         if len(vote_count) == 0:
             post_details['winning_candidate'] = None
             post_details['reason'] = "No one voted"
+        elif vote_count.count()>=2 and vote_count[0]['no_of_votes'] == vote_count[1]['no_of_votes']:
+            post_details['winning_candidate'] = True
+            post_details['is_draw'] = True
+            post_details['reason'] = "Draw vote Count detected"
+
         else:
             post_details['winning_candidate'] = [
                 Candidate.objects.get(voter=vote_count.first()['candidate']),
