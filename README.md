@@ -51,17 +51,6 @@ To create super user enter the following command:-<br>
 
 <p>Then go to http://127.0.0.1:8000 in your browser</p>
 
-<h2>Project snapshot</h2>
-<h3>Home page</h3>
-<div align="center">
-    <img src="https://user-images.githubusercontent.com/19981097/51409444-0e40a600-1b8c-11e9-9ab0-27d759db8973.jpg" width="100%"</img> 
-    
-</div>
-
-<h3>Login Page</h3>
-<div align="center">
-    <img src="https://user-images.githubusercontent.com/19981097/51409509-36c8a000-1b8c-11e9-845a-65b49262aa53.png" width="100%"</img> 
-</div>
 
 <h2>Author</h2>
 <blockquote>
