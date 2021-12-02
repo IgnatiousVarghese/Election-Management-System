@@ -1,6 +1,9 @@
 # Election-Management-System App
 
-Django Election-Management-System App is a full featured voting app. You have to register in this app to show the polls and to vote. If you already voted you can not vote again. Only the owner of a poll can add poll , edit poll, update poll, delete poll , add choice, update choice, delete choice and end a poll. If a poll is ended it can not be voted. Ended poll only shows user the final result of the poll. There is a search option for polls. Also user can filter polls by name, publish date, and by number of voted. Pagination will work even after applying filter.
+Django Election-Management-System App is a full featured voting app. You will have to be part of the college to use this app and to cast vote. Once voted for a post he/she will not be able to cast vote for that post again. Only election coordinator can add or remove posts and candidates. Candidates can be choosen only from the existing voters. Once election is ended it shows the final result. Candidates can add or edit there manifesto before starting the election.
+<br>
+SQLite database is utilized for this application to strore the data of all voters, candidates, posts and other information. 
+
 
 <h1>Getting Started</h1>
 <p>These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.</p>
@@ -53,16 +56,6 @@ To create super user enter the following command:-<br>
 
 <p>Then go to http://127.0.0.1:8000 in your browser</p>
 
-<h2>Project snapshot</h2>
-<h3>Home page</h3>
-<div align="center">
-    <img src="https://user-images.githubusercontent.com/19981097/51409444-0e40a600-1b8c-11e9-9ab0-27d759db8973.jpg" width="100%"</img> 
-</div>
-
-<h3>Login Page</h3>
-<div align="center">
-    <img src="https://user-images.githubusercontent.com/19981097/51409509-36c8a000-1b8c-11e9-845a-65b49262aa53.png" width="100%"</img> 
-</div>
 
 <h2>Author</h2>
 <blockquote>

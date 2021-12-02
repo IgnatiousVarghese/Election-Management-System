@@ -156,7 +156,7 @@ def end_election(request):
                     end_time = ec.end_time.strftime("%m/%d/%Y, %H:%M:%S")
                     ec.save()
                     messages.success(
-                        request, f"Election has offiaclly Ended. time : {end_time}")
+                        request, f"Election has officially Ended. time : {end_time}")
                     return redirect('result')
                 else:
                     messages.error(request, 'Election already ended.')
