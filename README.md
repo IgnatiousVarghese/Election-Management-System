@@ -1,6 +1,6 @@
 # Election-Management-System App
 
-Django Election-Management-System App is a full featured voting app. You will have to be part of the college to use this app and to cast vote. Once voted for a post he/she will not be able to cast vote for that post again. Only election coordinator can add or remove posts and candidates. Candidates can be choosen only from the existing voters. Once election is ended it shows the final result. Candidates can add or edit there manifesto before starting the election.
+Django Election-Management-System App is a full featured voting app. You will have to be part of the college to use this app and to cast vote. Voter and Election_coordinator details should be populated in database before starting of web app. Once voted for a post he/she will not be able to cast vote for that post again. Only election coordinator can add or remove posts and candidates. Candidates can be choosen only from the existing voters. Once election is ended it shows the final result. Candidates can add or edit there manifesto before starting the election.
 <br>
 SQLite database is utilized for this application to strore the data of all voters, candidates, posts and other information. 
 
@@ -25,44 +25,49 @@ To get the source code enter the following the command:-
 <code>python manage.py makemigrations</code><br>
 <code>python manage.py migrate</code>
 
-<h2>To create Election Coordinator </h2>
+<h2>Details on tables migrated </h2>
 <p>
 The above mentioned commands will create a database with table for <br>
 <code>Voter</code>  - detail of all voters populated before start of web app,
 <br>
 <code>Candidates</code>     - data of voters contesting in the electioon for any post
 <br>
-<code>Election Coordinator</code>
+<code>Election Coordinator</code>   - should contain a single election coordinator
 <br>
-<code>Manage_Candidate</code>
+<code>Manage_Candidate</code>   - contains timestamp on when candidate was added
 <br>
-<code>Manage_Post</code>
-The superuser created is NOT the Election Coordinator. EC has to be created by superuser in <code>Election_Coordinator</code> table
-</p><br>
-To create super user enter the following command:-<br>
-<code>python manage.py createsuperuser</code>
+<code>Manage_Post</code>   - contains timestamp on when Post was added
+<br>
 
-<h2>To Create some dummy text data for your app follow the step below:</h2>
-<code>pip install faker</code><br>
-<code>python manage.py shell</code><br>
-<code>import seeder</code><br>
-<code>seeder.seed_voter()</code><br>
-<code>seeder.seed_posts_and_candidates()</code><br>
-<code>seeder.seed_votes()</code><br>
+To create Election Coordinator enter the following command:-
+<br>
+```
+pip install Faker
+cd election_site
+python manage.py shell
+from election.models import Election_Coordinator
+username = "REQUIRED_USERNAME"
+password = "REQUIRED_PASSWORD"
+ec = Election_Coordinator(username=username, password = password)
+ec.save()
+```
+
+To seed random set Voters use seeder.py file
+<br>
+
+```
+from seeder import *
+seeder.seed_votes()
+```
+
+seed_votes() populates 50 voters to database
 
 
 <h2> To run the program in local server use the following command </h2>
 <code>python manage.py runserver</code>
 
-<p>Then go to http://127.0.0.1:8000 in your browser</p>
+<p>
+Then go to <a>http://127.0.0.1:8000 </a>in your browser
+</p>
 
 
-<h2>Author</h2>
-<blockquote>
-  Ignatious Varghese<br>
-  Email: ignatious@gmail.com
-</blockquote>
-
-<div align="center">
-    <h3>========Thank You !!!=========</h3>
-</div>
