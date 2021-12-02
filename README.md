@@ -22,7 +22,6 @@ To get the source code enter the following the command:-
 
 <h2>To migrate the database open terminal in project directory and type</h2>
 <br><code>cd election_site</code><br>
-<code>python manage.py makemigrations</code><br>
 <code>python manage.py migrate</code>
 
 <h2>Details on tables migrated </h2>
