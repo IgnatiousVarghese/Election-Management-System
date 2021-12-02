@@ -28,8 +28,7 @@ The above mentioned commands will create a database with table for
 <code>Voter</code>
 <code>Candidates</code>
 <code>Election Coordinator</code>
-<code>Election_Coordinator</code>
-<code>Election_Coordinator</code>
+
 The superuser created is NOT the Election Coordinator. EC has to be created by superuser in <code>Election_Coordinator</code> table
 </p><br>
 To create super user enter the following command:-<br>
