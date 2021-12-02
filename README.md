@@ -24,12 +24,16 @@ To get the source code enter the following the command:-
 
 <h2>To create Election Coordinator </h2>
 <p>
-The above mentioned commands will create a database with table for 
-<code>Voter</code>
-<code>Candidates</code>
+The above mentioned commands will create a database with table for <br>
+<code>Voter</code>  - detail of all voters populated before start of web app,
+<br>
+<code>Candidates</code>     - data of voters contesting in the electioon for any post
+<br>
 <code>Election Coordinator</code>
-<code>Election_Coordinator</code>
-<code>Election_Coordinator</code>
+<br>
+<code>Manage_Candidate</code>
+<br>
+<code>Manage_Post</code>
 The superuser created is NOT the Election Coordinator. EC has to be created by superuser in <code>Election_Coordinator</code> table
 </p><br>
 To create super user enter the following command:-<br>
