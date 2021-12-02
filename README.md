@@ -56,7 +56,7 @@ To seed random set Voters use seeder.py file
 
 ```
 from seeder import *
-seeder.seed_votes()
+seeder.seed_voter()
 ```
 
 seed_votes() populates 50 voters to database
