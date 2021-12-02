@@ -13,18 +13,22 @@
             <h2 class="jumbotron-heading">
                 Post : {{x.post.post_name}}
             </h2>
-            
         </div>
         <div class="container">
             {% if x.winning_candidate %}
+            {% if not x.is_draw %}
 
-            <h2 >
+            <h2>
                 Winnning Candidate : {{x.winning_candidate.0}}
             </h2>
             <h2 class="lead text-muted">
                 Votes received : {{x.winning_candidate.1}}
             </h2>
-
+            {% else %}
+            <h2>
+                {{x.reason}}
+            </h2>
+            {% endif %}
 
             <div>
                 <canvas id="{{x.post.id}}_chart" width="300" height="300" style="margin: auto;"></canvas>
